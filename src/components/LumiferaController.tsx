@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from './ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card'
 import { Slider } from './ui/slider'
@@ -50,22 +50,27 @@ export function LumiferaController() {
     const [wsStatus, setWsStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected')
     const [ws, setWs] = useState<WebSocket | null>(null)
     const [params, setParams] = useState<LumiferaParams>(DEFAULT_PARAMS)
+    const wsRef = useRef<WebSocket | null>(null);
 
-    useEffect(() => {
-        const websocket = new WebSocket(WS_URL)
+    const connect = () => {
+        if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
+            return;
+        }
+
+        const websocket = new WebSocket(WS_URL);
+        wsRef.current = websocket;
+        setWsStatus('connecting');
 
         websocket.onopen = () => {
-            console.log('Connected to ESP32')
-            setWsStatus('connected')
-            setWs(websocket)
-        }
+            setWsStatus('connected');
+            setWs(websocket);
+        };
 
         websocket.onclose = () => {
-            console.log('Disconnected from ESP32')
-            setWsStatus('disconnected')
-            setWs(null)
-        }
-
+            setWsStatus('disconnected');
+            setWs(null);
+            wsRef.current = null;
+        };
 
         websocket.onmessage = (event) => {
             try {
@@ -75,11 +80,17 @@ export function LumiferaController() {
                 console.error('Error parsing WebSocket message:', error);
             }
         };
+    };
 
+    useEffect(() => {
+        connect();
         return () => {
-            websocket.close()
-        }
-    }, [])
+            if (wsRef.current) {
+                wsRef.current.close();
+                wsRef.current = null;
+            }
+        };
+    }, []);
 
     const sendWebsocket = (paramName: ParamKey, paramValue: number) => {
         if (ws?.readyState === WebSocket.OPEN) {
@@ -93,151 +104,116 @@ export function LumiferaController() {
         }
     };
 
-    return (
-        <Card className="w-full max-w-2xl mx-auto">
+    const BackgroundCard = () => (
+        <Card className="h-full">
             <CardHeader>
-                <CardTitle>Lumifera Controller</CardTitle>
-                <CardDescription>
-                    Status: {wsStatus === 'connected' ?
-                        'Connected to LED Installation' :
-                        wsStatus === 'connecting' ?
-                            'Connecting...' :
-                            'Disconnected'}
-                </CardDescription>
+                <CardTitle>Background</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-                {/* BPM and Direction */}
+            <CardContent className="space-y-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">BPM</label>
+                    <label className="text-sm font-medium">Rotation Speed</label>
                     <Slider
-                        value={[params.bpm]}
-                        onValueChange={([value]) => sendWebsocket('bpm', value)}
-                        min={0}
-                        max={180}
-                        step={1}
+                        value={[params.bgRotSpeed]}
+                        onValueCommit={([value]) => sendWebsocket('bgRotSpeed', value)}
+                        min={0} max={255} step={1}
                     />
                 </div>
-
-                {/* Brightness */}
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Brightness</label>
+                    <label className="text-sm font-medium">Line Width</label>
                     <Slider
-                        value={[params.brightness]}
-                        onValueChange={([value]) => sendWebsocket('brightness', value)}
-                        min={0}
-                        max={255}
-                        step={1}
+                        value={[params.bgLineWidth]}
+                        onValueCommit={([value]) => sendWebsocket('bgLineWidth', value)}
+                        min={0} max={20} step={1}
                     />
                 </div>
-
-                {/* Foreground Controls */}
-                <div className="space-y-4">
-                    <h3 className="font-medium">Foreground</h3>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Animation Enable</label>
-                        <Switch
-                            checked={params.fgAnimationEnable === 1}
-                            onCheckedChange={(checked) =>
-                                sendWebsocket('fgAnimationEnable', checked ? 1 : 0)
-                            }
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Rotation Speed</label>
-                        <Slider
-                            value={[params.fgRotSpeed]}
-                            onValueChange={([value]) => sendWebsocket('fgRotSpeed', value)}
-                            min={0}
-                            max={255}
-                            step={1}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Line Width</label>
-                        <Slider
-                            value={[params.fgLineWidth]}
-                            onValueChange={([value]) => sendWebsocket('fgLineWidth', value)}
-                            min={0}
-                            max={20}
-                            step={1}
-                        />
-                    </div>
-                </div>
-
-                {/* Background Controls */}
-                <div className="space-y-4">
-                    <h3 className="font-medium">Background</h3>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Rotation Speed</label>
-                        <Slider
-                            value={[params.bgRotSpeed]}
-                            onValueChange={([value]) => sendWebsocket('bgRotSpeed', value)}
-                            min={0}
-                            max={255}
-                            step={1}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Line Width</label>
-                        <Slider
-                            value={[params.bgLineWidth]}
-                            onValueChange={([value]) => sendWebsocket('bgLineWidth', value)}
-                            min={0}
-                            max={20}
-                            step={1}
-                        />
-                    </div>
-                </div>
-
-                {/* Palette Controls */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Background Palette</label>
-                        <input
-                            type="number"
-                            value={params.bgPaletteIndex}
-                            onChange={(e) => sendWebsocket('bgPaletteIndex', Number(e.target.value))}
-                            min={0}
-                            max={70}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Foreground Palette</label>
-                        <input
-                            type="number"
-                            value={params.fgPaletteIndex}
-                            onChange={(e) => sendWebsocket('fgPaletteIndex', Number(e.target.value))}
-                            min={0}
-                            max={70}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
-                </div>
-
-                {/* Auto Advance Settings */}
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2">
-                        <Switch
-                            checked={params.autoAdvancePalette === 1}
-                            onCheckedChange={(checked) =>
-                                sendWebsocket('autoAdvancePalette', checked ? 1 : 0)
-                            }
-                        />
-                        <label className="text-sm font-medium">Auto Advance Palette</label>
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Auto Advance Delay (seconds)</label>
-                        <input
-                            type="number"
-                            value={params.autoAdvanceDelay}
-                            onChange={(e) => sendWebsocket('autoAdvanceDelay', Number(e.target.value))}
-                            min={0}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Palette</label>
+                    <input
+                        type="number"
+                        value={params.bgPaletteIndex}
+                        onChange={(e) => sendWebsocket('bgPaletteIndex', Number(e.target.value))}
+                        min={0} max={70}
+                        className="w-full p-2 border rounded"
+                    />
                 </div>
             </CardContent>
         </Card>
-    )
+    );
+
+    const ForegroundCard = () => (
+        <Card className="h-full">
+            <CardHeader>
+                <CardTitle>Foreground</CardTitle>
+                <div className="flex items-center gap-2">
+                    <Switch
+                        checked={params.fgAnimationEnable === 1}
+                        onCheckedChange={(checked) => sendWebsocket('fgAnimationEnable', checked ? 1 : 0)}
+                    />
+                    <label className="text-sm font-medium">Enable Animation</label>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Rotation Speed</label>
+                    <Slider
+                        disabled={params.fgAnimationEnable === 0}
+                        value={[params.fgRotSpeed]}
+                        onValueCommit={([value]) => sendWebsocket('fgRotSpeed', value)}
+                        min={0} max={255} step={1}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Line Width</label>
+                    <Slider
+                        disabled={params.fgAnimationEnable === 0}
+                        value={[params.fgLineWidth]}
+                        onValueCommit={([value]) => sendWebsocket('fgLineWidth', value)}
+                        min={0} max={20} step={1}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Palette</label>
+                    <input
+                        type="number"
+                        disabled={params.fgAnimationEnable === 0}
+                        value={params.fgPaletteIndex}
+                        onChange={(e) => sendWebsocket('fgPaletteIndex', Number(e.target.value))}
+                        min={0} max={70}
+                        className="w-full p-2 border rounded"
+                    />
+                </div>
+            </CardContent>
+        </Card>
+    );
+
+    return (
+        <div className="space-y-4 max-w-6xl mx-auto p-4">
+            <Card>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <CardTitle>Lumifera Controller</CardTitle>
+                            <CardDescription>Status: {wsStatus}</CardDescription>
+                        </div>
+                        {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">BPM</label>
+                        <Slider value={[params.bpm]} onValueCommit={([value]) => sendWebsocket('bpm', value)} min={0} max={180} step={1} />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Brightness</label>
+                        <Slider value={[params.brightness]} onValueCommit={([value]) => sendWebsocket('brightness', value)} min={0} max={255} step={1} />
+                    </div>
+                </CardContent>
+            </Card>
+
+            <div className="grid md:grid-cols-2 gap-4">
+                <BackgroundCard />
+                <ForegroundCard />
+            </div>
+        </div>
+    );
 }
