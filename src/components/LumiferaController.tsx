@@ -5,6 +5,8 @@ import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
 import { ThemeToggle } from './ui/theme-toggle.tsx'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from './ui/select.tsx'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription, SheetHeader } from "./ui/sheet.tsx"
+import { Menu } from "lucide-react"
 
 // Update this with your ESP32's WebSocket URL
 const WS_URL = 'ws://lumifera.local/ws'
@@ -113,20 +115,6 @@ export function LumiferaController() {
         }
     }, [params, ws, lastChanged]);
 
-    // const sendWebsocket = (paramName: ParamKey, paramValue: number) => {
-    //     // console.log('Attempting send:', paramName, paramValue);
-    //     setParams(prev => ({
-    //         ...prev,
-    //         [paramName]: paramValue
-    //     }));
-    //     if (ws?.readyState === WebSocket.OPEN) {
-    //         const message = { [paramName]: paramValue };
-    //         ws.send(JSON.stringify(message));
-    //         // Update local state
-
-    //     }
-    // };
-
     const BackgroundCard = () => (
         <Card className="h-full">
             <CardHeader>
@@ -224,11 +212,10 @@ export function LumiferaController() {
                             <CardTitle>Lumifera Controller</CardTitle>
                             <CardDescription>Status: {wsStatus}</CardDescription>
                         </div>
-                        <div className="flex gap-2">
-                            <Select
-                                value={userLevel}
-                                onValueChange={(value: UserLevel) => setUserLevel(value)}
-                            >
+
+                        {/* Desktop Controls */}
+                        <div className="hidden md:flex gap-2">
+                            <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select level" />
                                 </SelectTrigger>
@@ -241,6 +228,35 @@ export function LumiferaController() {
                             <ThemeToggle />
                             {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
                         </div>
+
+                        {/* Mobile Menu */}
+                        <Sheet>
+                            <SheetTrigger asChild className="md:hidden">
+                                <Button variant="ghost" size="icon">
+                                    <Menu className="h-6 w-6" />
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent>
+                                <SheetHeader>
+                                    <SheetTitle>Preferences</SheetTitle>
+                                    <SheetDescription>Configure experience level and theme</SheetDescription>
+                                </SheetHeader>
+                                <div className="space-y-4 py-4">
+                                    <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select level" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="beginner">Beginner</SelectItem>
+                                            <SelectItem value="intermediate">Intermediate</SelectItem>
+                                            <SelectItem value="advanced">Advanced</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <ThemeToggle />
+                                    {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                                </div>
+                            </SheetContent>
+                        </Sheet>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
