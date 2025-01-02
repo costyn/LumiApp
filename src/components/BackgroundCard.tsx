@@ -1,3 +1,4 @@
+import { Loader } from 'lucide-react'
 import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
@@ -6,13 +7,18 @@ import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 interface BackgroundCardProps {
     params: LumiferaParams
     updateParam: (name: ParamKey, value: number) => void
+    isLoading: boolean
+
 }
 
-export function BackgroundCard({ params, updateParam }: BackgroundCardProps) {
+export function BackgroundCard({ params, updateParam, isLoading }: BackgroundCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>
-                <CardTitle>Background</CardTitle>
+                <div className="flex items-right gap-4">
+                    <CardTitle>Background</CardTitle>
+                    {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+                </div>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">

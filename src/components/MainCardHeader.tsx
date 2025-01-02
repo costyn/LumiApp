@@ -3,7 +3,7 @@ import { Button } from './ui/button.tsx'
 import { CardHeader, CardTitle, CardDescription } from './ui/card.tsx'
 import { ThemeToggle } from './ui/theme-toggle.tsx'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from './ui/select.tsx'
-import { Menu } from "lucide-react"
+import { Loader, Menu } from "lucide-react"
 import {
     Dialog,
     DialogContent,
@@ -19,14 +19,19 @@ interface MainCardHeaderProps {
     connect: () => void
     userLevel: string
     setUserLevel: (level: UserLevel) => void
+    isLoading: boolean
 }
 
-export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel }: MainCardHeaderProps) {
+export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isLoading }: MainCardHeaderProps) {
     return (<>
         <CardHeader>
             <div className="flex justify-between items-center">
                 <div>
-                    <CardTitle>Lumifera Controller</CardTitle>
+                    <div className="flex items-right gap-4">
+                        <CardTitle>Lumifera Controller</CardTitle>
+                        {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+                    </div>
+
                     <CardDescription>Status: {wsStatus}</CardDescription>
                 </div>
 

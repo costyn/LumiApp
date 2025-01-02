@@ -12,7 +12,7 @@ export type UserLevel = 'beginner' | 'intermediate' | 'advanced';
 
 export function LumiferaController() {
 
-    const { wsStatus, connect, params, updateParam } = useWebSocket(WS_URL)
+    const { wsStatus, connect, params, updateParam, isLoading } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>('beginner');
 
     return (
@@ -24,6 +24,7 @@ export function LumiferaController() {
                     connect={connect}
                     userLevel={userLevel}
                     setUserLevel={setUserLevel}
+                    isLoading={isLoading}
                 />
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
@@ -46,8 +47,8 @@ export function LumiferaController() {
 
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BackgroundCard params={params} updateParam={updateParam} />
-                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} />}
+                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} />
+                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} />}
             </div>
         </div>
     );

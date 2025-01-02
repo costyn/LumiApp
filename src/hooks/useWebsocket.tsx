@@ -18,6 +18,7 @@ export interface LumiferaParams {
     autoAdvancePalette: number;
     autoAdvanceDelay: number;
     fixMode: FixMode;
+    blendTime: number;
 }
 
 export type ParamKey = keyof LumiferaParams;
@@ -36,7 +37,8 @@ const DEFAULT_PARAMS: LumiferaParams = {
     rasterSpacing: 0,
     autoAdvancePalette: 1,
     autoAdvanceDelay: 60,
-    fixMode: 'NONE'
+    fixMode: 'NONE',
+    blendTime: 4000, // default blendtime in milliseconds
 }
 
 
@@ -47,6 +49,8 @@ export function useWebSocket(url: string) {
     const wsRef = useRef<WebSocket | null>(null);
     const [lastChanged, setLastChanged] = useState<ParamKey | null>(null);
 
+    const [isLoading, setIsLoading] = useState(false);
+    const timer = useRef<number>();
 
     const connect = () => {
         if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
@@ -85,6 +89,9 @@ export function useWebSocket(url: string) {
                 wsRef.current.close();
                 wsRef.current = null;
             }
+            if (timer.current) {
+                window.clearTimeout(timer.current);
+            }
         };
     }, []);
 
@@ -92,6 +99,15 @@ export function useWebSocket(url: string) {
     const updateParam = (name: ParamKey, value: number) => {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
+        setIsLoading(true);
+        // Clear any existing timer
+        if (timer.current) {
+            window.clearTimeout(timer.current);
+        }
+        // Set new timer for blendTime milliseconds
+        timer.current = window.setTimeout(() => {
+            setIsLoading(false);
+        }, params.blendTime);
     };
 
     useEffect(() => {
@@ -99,7 +115,7 @@ export function useWebSocket(url: string) {
             ws.send(JSON.stringify({ [lastChanged]: params[lastChanged] }));
             setLastChanged(null);
         }
-    }, [params, ws, lastChanged]);
+    }, [params, ws, lastChanged, isLoading]);
 
-    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged }
+    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading }
 }

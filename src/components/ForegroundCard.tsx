@@ -2,19 +2,22 @@ import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
-import { PaletteSelector } from './PaletteSelector.tsx'
+import { palettesData } from './PaletteSelector.tsx'
+import { Loader } from 'lucide-react'
 
 interface ForegroundCardProps {
     params: LumiferaParams
     updateParam: (name: ParamKey, value: number) => void
+    isLoading: boolean
 }
 
-export function ForegroundCard({ params, updateParam }: ForegroundCardProps) {
+export function ForegroundCard({ params, updateParam, isLoading }: ForegroundCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>
                 <div className="flex items-right gap-4">
                     <CardTitle>Foreground</CardTitle>
+                    {isLoading && <Loader className="h-4 w-4 animate-spin" />}
                     <Switch
                         checked={params.fgAnimationEnable === 1}
                         onCheckedChange={(checked) => updateParam('fgAnimationEnable', checked ? 1 : 0)}
@@ -42,10 +45,18 @@ export function ForegroundCard({ params, updateParam }: ForegroundCardProps) {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Palette</label>
-                    <PaletteSelector
-                        value={params.fgPaletteIndex}
-                        onChange={(value) => updateParam('fgPaletteIndex', value)}
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Palette</label>
+                        <span className="text-sm text-muted-foreground">
+                            {palettesData.palettes[params.bgPaletteIndex]?.label ?? 'Unknown'}
+                        </span>
+                    </div>
+                    <Slider
+                        value={[params.bgPaletteIndex]}
+                        onValueChange={([value]) => updateParam('bgPaletteIndex', value)}
+                        min={0}
+                        max={palettesData.palettes.length - 1}
+                        step={1}
                     />
                 </div>
             </CardContent>
