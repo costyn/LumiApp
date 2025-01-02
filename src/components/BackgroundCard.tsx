@@ -1,0 +1,55 @@
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
+import { Slider } from './ui/slider.tsx'
+import { LumiferaParams, ParamKey } from "./LumiferaController"
+
+interface BackgroundCardProps {
+    params: LumiferaParams
+    updateParam: (name: ParamKey, value: number) => void
+}
+
+export function BackgroundCard({ params, updateParam }: BackgroundCardProps) {
+    return (
+        <Card className="h-full">
+            <CardHeader>
+                <CardTitle>Background</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Rotation Speed</label>
+                        <span className="text-sm text-muted-foreground">{params.bgRotSpeed}</span>
+                    </div>
+                    <Slider
+                        value={[params.bgRotSpeed]}
+                        onValueChange={(value) => {
+                            console.log('Slider change:', value);
+                            updateParam('bgRotSpeed', value[0]);
+                        }}
+                        min={0} max={255} step={1}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Line Width</label>
+                        <span className="text-sm text-muted-foreground">{params.bgLineWidth}</span>
+                    </div>
+                    <Slider
+                        value={[params.bgLineWidth]}
+                        onValueChange={([value]) => updateParam('bgLineWidth', value)}
+                        min={0} max={20} step={0.1}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Palette</label>
+                    <input
+                        type="number"
+                        value={params.bgPaletteIndex}
+                        onChange={(e) => updateParam('bgPaletteIndex', Number(e.target.value))}
+                        min={0} max={70}
+                        className="w-full p-2 border rounded"
+                    />
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
