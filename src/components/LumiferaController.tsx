@@ -66,6 +66,16 @@ export function LumiferaController() {
             setWs(null)
         }
 
+
+        websocket.onmessage = (event) => {
+            try {
+                const receivedParams = JSON.parse(event.data);
+                setParams(prev => ({ ...prev, ...receivedParams }));
+            } catch (error) {
+                console.error('Error parsing WebSocket message:', error);
+            }
+        };
+
         return () => {
             websocket.close()
         }
