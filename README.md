@@ -15,3 +15,9 @@ pnpm dlx @shadcn/ui@latest add
 ```shell
 pnpm build
 ```
+
+## TODO / Feature Wishlist
+* Buttons for blend time
+* Buttons for fix mode
+* Blend time input lockout
+* Palette dropdown/selector?

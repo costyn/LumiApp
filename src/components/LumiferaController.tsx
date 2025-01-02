@@ -1,28 +1,14 @@
 import { useState } from 'react'
-import { Button } from './ui/button.tsx'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card.tsx'
+import { Card, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
-import { ThemeToggle } from './ui/theme-toggle.tsx'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from './ui/select.tsx'
-import { Menu } from "lucide-react"
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogTrigger
-} from "@/components/ui/dialog"
 import { BackgroundCard } from './BackgroundCard'
 import { ForegroundCard } from './ForegroundCard'
 import { useWebSocket } from '@/hooks/useWebsocket.tsx'
+import { MainCardHeader } from './MainCardHeader.tsx'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
-
-type UserLevel = 'beginner' | 'intermediate' | 'advanced';
-
-
+export type UserLevel = 'beginner' | 'intermediate' | 'advanced';
 
 export function LumiferaController() {
 
@@ -31,62 +17,14 @@ export function LumiferaController() {
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto p-4">
+            {/* Main Card */}
             <Card>
-                <CardHeader>
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <CardTitle>Lumifera Controller</CardTitle>
-                            <CardDescription>Status: {wsStatus}</CardDescription>
-                        </div>
-
-                        {/* Desktop Controls */}
-                        <div className="hidden md:flex gap-2">
-                            <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select level" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="beginner">Beginner</SelectItem>
-                                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                                    <SelectItem value="advanced">Advanced</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <ThemeToggle />
-                            {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
-                        </div>
-
-                        {/* Mobile Menu */}
-                        <Dialog>
-                            <DialogTrigger asChild className="md:hidden">
-                                <Button variant="ghost" size="icon">
-                                    <Menu className="h-6 w-6" />
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Preferences</DialogTitle>
-                                    <DialogDescription>Configure experience level and theme</DialogDescription>
-                                </DialogHeader>
-                                <div className="flex flex-col gap-6 py-4">
-                                    <div className="space-y-4">
-                                        <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select level" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="beginner">Beginner</SelectItem>
-                                                <SelectItem value="intermediate">Intermediate</SelectItem>
-                                                <SelectItem value="advanced">Advanced</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <ThemeToggle />
-                                    </div>
-                                    {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
-                                </div>
-                            </DialogContent>
-                        </Dialog>
-                    </div>
-                </CardHeader>
+                <MainCardHeader
+                    wsStatus={wsStatus}
+                    connect={connect}
+                    userLevel={userLevel}
+                    setUserLevel={setUserLevel}
+                />
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
@@ -106,6 +44,7 @@ export function LumiferaController() {
                 </CardContent>
             </Card>
 
+            {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
                 <BackgroundCard params={params} updateParam={updateParam} />
                 {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} />}
