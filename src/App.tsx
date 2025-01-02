@@ -1,5 +1,5 @@
-import { LumiferaController } from './components/LumiferaController'
-import { ThemeProvider } from "./components/ThemeProvider"
+import { LumiferaController } from './components/LumiferaController.tsx'
+import { ThemeProvider } from "./components/ThemeProvider.tsx"
 
 function App() {
   return (

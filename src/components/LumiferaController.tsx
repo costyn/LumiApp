@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
-import { Button } from './ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card'
-import { Slider } from './ui/slider'
-import { Switch } from './ui/switch'
-import { ThemeToggle } from './ui/theme-toggle'
+import { Button } from './ui/button.tsx'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card.tsx'
+import { Slider } from './ui/slider.tsx'
+import { Switch } from './ui/switch.tsx'
+import { ThemeToggle } from './ui/theme-toggle.tsx'
 
 // Update this with your ESP32's WebSocket URL
 const WS_URL = 'ws://lumifera.local/ws'
 
-type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
+// type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
 interface LumiferaParams {
     bpm: number;
