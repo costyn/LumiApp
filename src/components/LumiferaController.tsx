@@ -54,6 +54,7 @@ export function LumiferaController() {
     const [ws, setWs] = useState<WebSocket | null>(null)
     const [params, setParams] = useState<LumiferaParams>(DEFAULT_PARAMS)
     const wsRef = useRef<WebSocket | null>(null);
+    const [lastChanged, setLastChanged] = useState<ParamKey | null>(null);
 
     const connect = () => {
         if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
@@ -95,19 +96,31 @@ export function LumiferaController() {
         };
     }, []);
 
-    const sendWebsocket = (paramName: ParamKey, paramValue: number) => {
-        // console.log('Attempting send:', paramName, paramValue);
-        setParams(prev => ({
-            ...prev,
-            [paramName]: paramValue
-        }));
-        if (ws?.readyState === WebSocket.OPEN) {
-            const message = { [paramName]: paramValue };
-            ws.send(JSON.stringify(message));
-            // Update local state
-
-        }
+    const updateParam = (name: ParamKey, value: number) => {
+        setParams(prev => ({ ...prev, [name]: value }));
+        setLastChanged(name);
     };
+
+    useEffect(() => {
+        if (ws?.readyState === WebSocket.OPEN && lastChanged) {
+            ws.send(JSON.stringify({ [lastChanged]: params[lastChanged] }));
+            setLastChanged(null);
+        }
+    }, [params, ws, lastChanged]);
+
+    // const sendWebsocket = (paramName: ParamKey, paramValue: number) => {
+    //     // console.log('Attempting send:', paramName, paramValue);
+    //     setParams(prev => ({
+    //         ...prev,
+    //         [paramName]: paramValue
+    //     }));
+    //     if (ws?.readyState === WebSocket.OPEN) {
+    //         const message = { [paramName]: paramValue };
+    //         ws.send(JSON.stringify(message));
+    //         // Update local state
+
+    //     }
+    // };
 
     const BackgroundCard = () => (
         <Card className="h-full">
@@ -122,7 +135,7 @@ export function LumiferaController() {
                     </div>
                     <Slider
                         value={[params.bgRotSpeed]}
-                        onValueChange={([value]) => sendWebsocket('bgRotSpeed', value)}
+                        onValueChange={([value]) => updateParam('bgRotSpeed', value)}
                         min={0} max={255} step={1}
                     />
                 </div>
@@ -133,7 +146,7 @@ export function LumiferaController() {
                     </div>
                     <Slider
                         value={[params.bgLineWidth]}
-                        onValueChange={([value]) => sendWebsocket('bgLineWidth', value)}
+                        onValueChange={([value]) => updateParam('bgLineWidth', value)}
                         min={0} max={20} step={1}
                     />
                 </div>
@@ -142,7 +155,7 @@ export function LumiferaController() {
                     <input
                         type="number"
                         value={params.bgPaletteIndex}
-                        onChange={(e) => sendWebsocket('bgPaletteIndex', Number(e.target.value))}
+                        onChange={(e) => updateParam('bgPaletteIndex', Number(e.target.value))}
                         min={0} max={70}
                         className="w-full p-2 border rounded"
                     />
@@ -158,7 +171,7 @@ export function LumiferaController() {
                     <CardTitle>Foreground</CardTitle>
                     <Switch
                         checked={params.fgAnimationEnable === 1}
-                        onCheckedChange={(checked) => sendWebsocket('fgAnimationEnable', checked ? 1 : 0)}
+                        onCheckedChange={(checked) => updateParam('fgAnimationEnable', checked ? 1 : 0)}
                     />
                     <label className="text-sm font-medium">Enable Animation</label>
                 </div>
@@ -169,7 +182,7 @@ export function LumiferaController() {
                     <Slider
                         disabled={params.fgAnimationEnable === 0}
                         value={[params.fgRotSpeed]}
-                        onValueChange={([value]) => sendWebsocket('fgRotSpeed', value)}
+                        onValueChange={([value]) => updateParam('fgRotSpeed', value)}
                         min={0} max={255} step={1}
                     />
                 </div>
@@ -178,7 +191,7 @@ export function LumiferaController() {
                     <Slider
                         disabled={params.fgAnimationEnable === 0}
                         value={[params.fgLineWidth]}
-                        onValueChange={([value]) => sendWebsocket('fgLineWidth', value)}
+                        onValueChange={([value]) => updateParam('fgLineWidth', value)}
                         min={0} max={20} step={1}
                     />
                 </div>
@@ -188,7 +201,7 @@ export function LumiferaController() {
                         type="number"
                         disabled={params.fgAnimationEnable === 0}
                         value={params.fgPaletteIndex}
-                        onChange={(e) => sendWebsocket('fgPaletteIndex', Number(e.target.value))}
+                        onChange={(e) => updateParam('fgPaletteIndex', Number(e.target.value))}
                         min={0} max={70}
                         className="w-full p-2 border rounded"
                     />
@@ -218,7 +231,7 @@ export function LumiferaController() {
                             <label className="text-sm font-medium">BPM</label>
                             <span className="text-sm text-muted-foreground">{params.bpm}</span>
                         </div>
-                        <Slider value={[params.bpm]} onValueChange={([value]) => sendWebsocket('bpm', value)} min={0} max={180} step={1} />
+                        <Slider value={[params.bpm]} onValueChange={([value]) => updateParam('bpm', value)} min={0} max={180} step={1} />
                     </div>
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
@@ -226,7 +239,7 @@ export function LumiferaController() {
                             <span className="text-sm text-muted-foreground">{params.brightness}</span>
                         </div>
 
-                        <Slider value={[params.brightness]} onValueChange={([value]) => sendWebsocket('brightness', value)} min={0} max={255} step={1} />
+                        <Slider value={[params.brightness]} onValueChange={([value]) => updateParam('brightness', value)} min={0} max={255} step={1} />
                     </div>
                 </CardContent>
             </Card>
