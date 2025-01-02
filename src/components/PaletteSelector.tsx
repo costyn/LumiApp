@@ -1,3 +1,5 @@
+// NOT IN USE YET
+
 // components/PaletteSelector.tsx
 import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -17,9 +19,11 @@ import {
 import { useState } from "react"
 import palettesJson from '@/assets/palettes.json'
 
-interface PalettesData {
+export interface PalettesData {
     palettes: Palette[]
 }
+
+export const palettesData = palettesJson as PalettesData;
 
 export interface Palette {
     index: number
@@ -34,7 +38,6 @@ interface PaletteSelectorProps {
     onChange: (value: number) => void
 }
 
-const palettesData = palettesJson as PalettesData;
 
 export function PaletteSelector({ value, onChange }: PaletteSelectorProps) {
     const palettes = palettesData.palettes
@@ -55,31 +58,26 @@ export function PaletteSelector({ value, onChange }: PaletteSelectorProps) {
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-full p-0">
-                <Command >
+                <Command>
                     <CommandInput placeholder="Search palettes..." />
                     <CommandEmpty>No palette found.</CommandEmpty>
                     <CommandGroup>
                         {palettes.map((palette) => (
                             <CommandItem
                                 key={palette.index}
-                                value={palette.label} // Use label instead of index for filtering
+                                value={palette.label}
+                                onSelect={() => {
+                                    onChange(palette.index)
+                                    setOpen(false)
+                                }}
                             >
-                                <button
-                                    onClick={() => {
-                                        console.log('Selected:', palette.label);
-                                        onChange(palette.index);
-                                        setOpen(false);
-                                    }}
-                                    className="flex w-full items-center"
-                                >
-                                    <Check
-                                        className={cn(
-                                            "mr-2 h-4 w-4",
-                                            value === palette.index ? "opacity-100" : "opacity-0"
-                                        )}
-                                    />
-                                    {palette.label}
-                                </button>
+                                <Check
+                                    className={cn(
+                                        "mr-2 h-4 w-4",
+                                        value === palette.index ? "opacity-100" : "opacity-0"
+                                    )}
+                                />
+                                {palette.label}
                             </CommandItem>
                         ))}
                     </CommandGroup>

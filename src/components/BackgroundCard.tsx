@@ -1,4 +1,4 @@
-import { PaletteSelector } from './PaletteSelector.tsx'
+import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
@@ -38,10 +38,18 @@ export function BackgroundCard({ params, updateParam }: BackgroundCardProps) {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Palette</label>
-                    <PaletteSelector
-                        value={params.bgPaletteIndex}
-                        onChange={(value) => updateParam('bgPaletteIndex', value)}
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Palette</label>
+                        <span className="text-sm text-muted-foreground">
+                            {palettesData.palettes[params.bgPaletteIndex]?.label ?? 'Unknown'}
+                        </span>
+                    </div>
+                    <Slider
+                        value={[params.bgPaletteIndex]}
+                        onValueChange={([value]) => updateParam('bgPaletteIndex', value)}
+                        min={0}
+                        max={palettesData.palettes.length - 1}
+                        step={1}
                     />
                 </div>
             </CardContent>
