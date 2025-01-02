@@ -10,36 +10,40 @@ const WS_URL = 'ws://lumifera.local/ws'
 type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
 interface LumiferaParams {
-    preset: number;
-    palette: number;
     bpm: number;
-    bpmReverse: boolean;
-    rotation: number;
-    line: number;
+    direction: number;
+    fgAnimationEnable: number;
+    fgRotSpeed: number;
+    bgRotSpeed: number;
+    fgLineWidth: number;
+    bgLineWidth: number;
+    canvasHeight: number;
+    bgPaletteIndex: number;
+    fgPaletteIndex: number;
+    brightness: number;
+    rasterSpacing: number;
     autoAdvancePalette: number;
     autoAdvanceDelay: number;
-    brightness: number;
-    fixmode?: FixMode;
-    manualCrossfade: boolean;
-    blend: number;
-    crossfadeTime: number;
 }
 
 type ParamKey = keyof LumiferaParams;
 
+
 const DEFAULT_PARAMS: LumiferaParams = {
-    preset: 1,
-    palette: 1,
-    bpm: 1,
-    bpmReverse: false,
-    rotation: 128,
-    line: 2,
+    bpm: 26,
+    direction: 1,
+    fgAnimationEnable: 0,
+    fgRotSpeed: 135,
+    bgRotSpeed: 28,
+    fgLineWidth: 4,
+    bgLineWidth: 3,
+    canvasHeight: 0,
+    bgPaletteIndex: 1,
+    fgPaletteIndex: 5,
+    brightness: 150,
+    rasterSpacing: 0,
     autoAdvancePalette: 1,
-    autoAdvanceDelay: 180,
-    brightness: 128,
-    manualCrossfade: false,
-    blend: 0,
-    crossfadeTime: 128
+    autoAdvanceDelay: 60
 }
 
 export function LumiferaController() {
@@ -67,19 +71,16 @@ export function LumiferaController() {
         }
     }, [])
 
-    type SendWebsocketFn = (paramName: ParamKey, paramValue: number | boolean) => void;
-
-    const sendWebsocket: SendWebsocketFn = (paramName, paramValue) => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
+    const sendWebsocket = (paramName: ParamKey, paramValue: number) => {
+        if (ws?.readyState === WebSocket.OPEN) {
             const message = { [paramName]: paramValue };
-            console.log('Sending:', JSON.stringify(message));
             ws.send(JSON.stringify(message));
+            // Update local state
+            setParams(prev => ({
+                ...prev,
+                [paramName]: paramValue
+            }));
         }
-    };
-
-    const updateParam = (paramName: ParamKey, value: number | boolean) => {
-        setParams(prev => ({ ...prev, [paramName]: value }));
-        sendWebsocket(paramName, value);
     };
 
     return (
@@ -95,25 +96,108 @@ export function LumiferaController() {
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                {/* Basic Controls */}
+                {/* BPM and Direction */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">BPM</label>
+                    <Slider
+                        value={[params.bpm]}
+                        onValueChange={([value]) => sendWebsocket('bpm', value)}
+                        min={0}
+                        max={180}
+                        step={1}
+                    />
+                </div>
+
+                {/* Brightness */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Brightness</label>
+                    <Slider
+                        value={[params.brightness]}
+                        onValueChange={([value]) => sendWebsocket('brightness', value)}
+                        min={0}
+                        max={255}
+                        step={1}
+                    />
+                </div>
+
+                {/* Foreground Controls */}
+                <div className="space-y-4">
+                    <h3 className="font-medium">Foreground</h3>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Animation Enable</label>
+                        <Switch
+                            checked={params.fgAnimationEnable === 1}
+                            onCheckedChange={(checked) =>
+                                sendWebsocket('fgAnimationEnable', checked ? 1 : 0)
+                            }
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Rotation Speed</label>
+                        <Slider
+                            value={[params.fgRotSpeed]}
+                            onValueChange={([value]) => sendWebsocket('fgRotSpeed', value)}
+                            min={0}
+                            max={255}
+                            step={1}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Line Width</label>
+                        <Slider
+                            value={[params.fgLineWidth]}
+                            onValueChange={([value]) => sendWebsocket('fgLineWidth', value)}
+                            min={0}
+                            max={20}
+                            step={1}
+                        />
+                    </div>
+                </div>
+
+                {/* Background Controls */}
+                <div className="space-y-4">
+                    <h3 className="font-medium">Background</h3>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Rotation Speed</label>
+                        <Slider
+                            value={[params.bgRotSpeed]}
+                            onValueChange={([value]) => sendWebsocket('bgRotSpeed', value)}
+                            min={0}
+                            max={255}
+                            step={1}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Line Width</label>
+                        <Slider
+                            value={[params.bgLineWidth]}
+                            onValueChange={([value]) => sendWebsocket('bgLineWidth', value)}
+                            min={0}
+                            max={20}
+                            step={1}
+                        />
+                    </div>
+                </div>
+
+                {/* Palette Controls */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Preset</label>
+                        <label className="text-sm font-medium">Background Palette</label>
                         <input
                             type="number"
-                            value={params.preset}
-                            onChange={(e) => updateParam('preset', Number(e.target.value))}
+                            value={params.bgPaletteIndex}
+                            onChange={(e) => sendWebsocket('bgPaletteIndex', Number(e.target.value))}
                             min={0}
-                            max={5}
+                            max={70}
                             className="w-full p-2 border rounded"
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Palette</label>
+                        <label className="text-sm font-medium">Foreground Palette</label>
                         <input
                             type="number"
-                            value={params.palette}
-                            onChange={(e) => updateParam('palette', Number(e.target.value))}
+                            value={params.fgPaletteIndex}
+                            onChange={(e) => sendWebsocket('fgPaletteIndex', Number(e.target.value))}
                             min={0}
                             max={70}
                             className="w-full p-2 border rounded"
@@ -121,53 +205,26 @@ export function LumiferaController() {
                     </div>
                 </div>
 
-                {/* BPM Controls */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">BPM</label>
-                    <div className="flex gap-4 items-center">
+                {/* Auto Advance Settings */}
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                        <Switch
+                            checked={params.autoAdvancePalette === 1}
+                            onCheckedChange={(checked) =>
+                                sendWebsocket('autoAdvancePalette', checked ? 1 : 0)
+                            }
+                        />
+                        <label className="text-sm font-medium">Auto Advance Palette</label>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Auto Advance Delay (seconds)</label>
                         <input
                             type="number"
-                            value={params.bpm}
-                            onChange={(e) => updateParam('bpm', Number(e.target.value))}
+                            value={params.autoAdvanceDelay}
+                            onChange={(e) => sendWebsocket('autoAdvanceDelay', Number(e.target.value))}
                             min={0}
-                            max={180}
-                            step={0.1}
-                            className="w-32 p-2 border rounded"
+                            className="w-full p-2 border rounded"
                         />
-                        <div className="flex items-center gap-2">
-                            <Switch
-                                checked={params.bpmReverse}
-                                onCheckedChange={(checked) => updateParam('bpmReverse', checked)}
-                            />
-                            <label className="text-sm">Reverse</label>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Brightness Slider */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">Brightness</label>
-                    <Slider
-                        value={[params.brightness]}
-                        onValueChange={([value]) => updateParam('brightness', value)}
-                        max={255}
-                        step={1}
-                    />
-                </div>
-
-                {/* Fixmode Buttons */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">Fixmode</label>
-                    <div className="grid grid-cols-4 gap-2">
-                        {(['PAUSE', 'RADAR', 'RADIATE', 'NONE'] as FixMode[]).map((mode) => (
-                            <Button
-                                key={mode}
-                                variant={params.fixmode === mode ? 'default' : 'outline'}
-                                onClick={() => updateParam('fixmode', mode)}
-                            >
-                                {mode}
-                            </Button>
-                        ))}
                     </div>
                 </div>
             </CardContent>
