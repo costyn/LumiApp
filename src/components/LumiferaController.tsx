@@ -3,6 +3,7 @@ import { Button } from './ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card'
 import { Slider } from './ui/slider'
 import { Switch } from './ui/switch'
+import { ThemeToggle } from './ui/theme-toggle'
 
 // Update this with your ESP32's WebSocket URL
 const WS_URL = 'ws://lumifera.local/ws'
@@ -111,7 +112,10 @@ export function LumiferaController() {
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Rotation Speed</label>
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Rotation Speed</label>
+                        <span className="text-sm text-muted-foreground">{params.bgRotSpeed}</span>
+                    </div>
                     <Slider
                         value={[params.bgRotSpeed]}
                         onValueCommit={([value]) => sendWebsocket('bgRotSpeed', value)}
@@ -119,7 +123,10 @@ export function LumiferaController() {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Line Width</label>
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Line Width</label>
+                        <span className="text-sm text-muted-foreground">{params.bgLineWidth}</span>
+                    </div>
                     <Slider
                         value={[params.bgLineWidth]}
                         onValueCommit={([value]) => sendWebsocket('bgLineWidth', value)}
@@ -143,8 +150,8 @@ export function LumiferaController() {
     const ForegroundCard = () => (
         <Card className="h-full">
             <CardHeader>
-                <CardTitle>Foreground</CardTitle>
-                <div className="flex items-center gap-2">
+                <div className="flex items-right gap-4">
+                    <CardTitle>Foreground</CardTitle>
                     <Switch
                         checked={params.fgAnimationEnable === 1}
                         onCheckedChange={(checked) => sendWebsocket('fgAnimationEnable', checked ? 1 : 0)}
@@ -195,16 +202,26 @@ export function LumiferaController() {
                             <CardTitle>Lumifera Controller</CardTitle>
                             <CardDescription>Status: {wsStatus}</CardDescription>
                         </div>
-                        {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                        <div className="flex gap-2">
+                            <ThemeToggle />
+                            {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">BPM</label>
+                        <div className="flex justify-left items-center gap-2">
+                            <label className="text-sm font-medium">BPM</label>
+                            <span className="text-sm text-muted-foreground">{params.bpm}</span>
+                        </div>
                         <Slider value={[params.bpm]} onValueCommit={([value]) => sendWebsocket('bpm', value)} min={0} max={180} step={1} />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Brightness</label>
+                        <div className="flex justify-left items-center gap-2">
+                            <label className="text-sm font-medium">Brightness</label>
+                            <span className="text-sm text-muted-foreground">{params.brightness}</span>
+                        </div>
+
                         <Slider value={[params.brightness]} onValueCommit={([value]) => sendWebsocket('brightness', value)} min={0} max={255} step={1} />
                     </div>
                 </CardContent>

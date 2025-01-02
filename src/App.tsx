@@ -1,10 +1,13 @@
 import { LumiferaController } from './components/LumiferaController'
+import { ThemeProvider } from "./components/ThemeProvider"
 
 function App() {
   return (
-    <main className="min-h-screen p-4 bg-gray-50">
-      <LumiferaController />
-    </main>
+    <ThemeProvider defaultTheme="dark">
+      <main className="min-h-screen bg-background p-4">
+        <LumiferaController />
+      </main>
+    </ThemeProvider>
   )
 }
 
