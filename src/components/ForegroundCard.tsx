@@ -2,6 +2,7 @@ import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
+import { PaletteSelector } from './PaletteSelector.tsx'
 
 interface ForegroundCardProps {
     params: LumiferaParams
@@ -42,13 +43,9 @@ export function ForegroundCard({ params, updateParam }: ForegroundCardProps) {
                 </div>
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Palette</label>
-                    <input
-                        type="number"
-                        disabled={params.fgAnimationEnable === 0}
+                    <PaletteSelector
                         value={params.fgPaletteIndex}
-                        onChange={(e) => updateParam('fgPaletteIndex', Number(e.target.value))}
-                        min={0} max={70}
-                        className="w-full p-2 border rounded"
+                        onChange={(value) => updateParam('fgPaletteIndex', value)}
                     />
                 </div>
             </CardContent>

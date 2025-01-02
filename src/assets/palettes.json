@@ -1,0 +1,671 @@
+{
+	"palettes":[
+		{
+            "index" : 0,
+	   		"label": "Rainbow",
+			"gpName" : "RainbowColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "rainbow",
+                "bright",
+                "fastled"
+            ]
+		},
+		{
+            "index" : 1,
+	   		"label": "Ocean",
+			"gpName" : "OceanColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "cool",
+                "fastled"
+            ]
+		},
+		{
+            "index" : 2,
+	   		"label": "Heat",
+			"gpName" : "HeatColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "fastled"
+            ]
+		},
+		{
+            "index" : 3,
+	   		"label": "Lava",
+			"gpName" : "LavaColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "fastled"
+            ]
+		},
+        {
+            "index" : 4,
+	   		"label": "Heat",
+			"gpName" : "PartyColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "bright",
+                "red",
+                "fastled"
+            ]
+		},
+		{
+            "index" : 5,
+	   		"label": "Clouds",
+			"gpName" : "CloudColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "cool",
+                "bright",
+                "blue",
+                "fastled"
+            ]
+		},
+		{
+            "index" : 6,
+	   		"label": "Forest",
+			"gpName" : "ForestColors_p",
+            "enabled" : "yes",
+            "tags" : [
+                "cool",
+                "fastled"
+            ]
+		},
+		{
+            "index" : 7,
+	   		"label": "Rainbow Bands",
+			"gpName" : "sutaburosuRainbowPalette",
+            "enabled" : "yes",
+            "tags" : [
+                "happy",
+                "custom"
+            ]
+		},
+		{
+            "index" : 8,
+	   		"label": "Red Stripe",
+			"gpName" : "aspect_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "red",
+                "dark",
+                "custom"
+            ]
+		},
+		{
+            "index" : 9,
+	   		"label": "Yellow Purp Red",
+			"gpName" : "yellowPurpRed_p",
+            "enabled" : "yes",
+            "tags" : [
+                "happy",
+                "custom"
+            ]
+		},
+		{
+            "index" : 10,
+            "label": "WubSunSet",
+            "gpName" : "WubGradSunSet",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "custom"
+            ]
+        },
+		{
+            "index" : 11,
+            "label": "Andy Gilmore 2",
+            "gpName" : "AndyGIlmore2",
+            "enabled" : "yes",
+            "tags" : [
+                "funky",
+                "custom"
+            ]
+        },
+        {
+            "index" : 12,
+            "label": "CSS Gradient Test",
+            "gpName" : "cssgradient1",
+            "enabled" : "yes",
+            "tags" : [
+                "custom"
+            ]
+        },
+		{
+            "index" : 13,
+            "label": "Sunset",
+            "gpName" : "Sunset_Real_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "wled"
+            ]
+        },
+		{
+            "index" : 14,
+            "label": "Rivendell",
+            "gpName" : "es_rivendell_15_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "green",
+                "wled"
+            ]
+        },
+		{
+            "index" : 15,
+            "label": "Breeze",
+            "gpName" : "es_ocean_breeze_036_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "cool",
+                "wled"
+            ]
+        },
+        {
+            "index" : 16,
+            "label": "Red & Blue",
+            "gpName" : "rgi_15_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "wled"
+            ]
+        },
+        {
+            "index" : 17,
+            "label": "Yellowout",
+            "gpName" : "retro2_16_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "wled"
+            ]
+        },
+        {
+            "index" : 18,
+            "label": "Analogous",
+            "gpName" : "Analogous_1_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "yellow",
+                "wled"
+            ]
+        },
+        {
+            "index" : 19,
+            "label": "Splash",
+            "gpName" : "es_pinksplash_08_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "pink",
+                "wled"
+            ]
+        },
+        {
+            "index" : 20,
+            "label": "Pastel",
+            "gpName" : "Sunset_Yellow_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "sunset",
+                "wled"
+            ]
+        },
+        {
+            "index" : 21,
+            "label": "Sunset2",
+            "gpName" : "Another_Sunset_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 22,
+            "label": "Beech",
+            "gpName" : "Beech_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 23,
+            "label": "Vintage",
+            "gpName" : "es_vintage_01_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 24,
+            "label": "Departure",
+            "gpName" : "departure_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "wled"
+            ]
+        },
+        {
+            "index" : 25,
+            "label": "Landscape",
+            "gpName" : "es_landscape_64_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "wled"
+            ]
+        },
+        {
+            "index" :26,
+            "label": "Beach",
+            "gpName" : "es_landscape_33_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "warm",
+                "wled"
+            ]
+        },
+        {
+            "index" : 27,
+            "label": "Sherbet",
+            "gpName" : "rainbowsherbet_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 28,
+            "label": "Hult",
+            "gpName" : "gr65_hult_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 29,
+            "label": "Hult64",
+            "gpName" : "gr64_hult_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 30,
+            "label": "Drywet",
+            "gpName" : "GMT_drywet_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 31,
+            "label": "Jul",
+            "gpName" : "ib_jul01_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 32,
+            "label": "Grintage",
+            "gpName" : "es_vintage_57_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 33,
+            "label": "Rewhi",
+            "gpName" : "ib15_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 34,
+            "label": "Tertiary",
+            "gpName" : "Tertiary_01_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 35,
+            "label": "Fire",
+            "gpName" : "lava_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 36,
+            "label": "Icefire",
+            "gpName" : "fierce_ice_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 37,
+            "label": "Cyane",
+            "gpName" : "Colorfull_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 38,
+            "label": "Light Pink",
+            "gpName" : "Pink_Purple_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 39,
+            "label": "Autumn",
+            "gpName" : "es_autumn_19_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 40,
+            "label": "Magenta",
+            "gpName" : "BlacK_Blue_Magenta_White_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 41,
+            "label": "Magred",
+            "gpName" : "BlacK_Magenta_Red_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 42,
+            "label": "Yelmag",
+            "gpName" : "BlacK_Red_Magenta_Yellow_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 43,
+            "label": "Yelblu",
+            "gpName" : "Blue_Cyan_Yellow_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 44,
+            "label": "Orange & Teal",
+            "gpName" : "Orange_Teal_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 45,
+            "label": "Tiamat",
+            "gpName" : "Tiamat_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 46,
+            "label": "April Night",
+            "gpName" : "April_Night_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 47,
+            "label": "Orangery",
+            "gpName" : "Orangery_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 48,
+            "label": "C9",
+            "gpName" : "C9_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 49,
+            "label": "Sakura",
+            "gpName" : "Sakura_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 50,
+            "label": "Aurora",
+            "gpName" : "Aurora_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 51,
+            "label": "Atlantica",
+            "gpName" : "Atlantica_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 52,
+            "label": "C9 2",
+            "gpName" : "C9_2_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 53,
+            "label": "C9 New",
+            "gpName" : "C9_new_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 54,
+            "label": "Temperature",
+            "gpName" : "temperature_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 55,
+            "label": "Aurora 2",
+            "gpName" : "Aurora2_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 56,
+            "label": "Retro Clown",
+            "gpName" : "retro_clown_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 57,
+            "label": "Candy",
+            "gpName" : "candy_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 58,
+            "label": "Toxy Reaf",
+            "gpName" : "toxy_reaf_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 59,
+            "label": "Fairy Reaf",
+            "gpName" : "fairy_reaf_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 60,
+            "label": "Semi Blue",
+            "gpName" : "semi_blue_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 61,
+            "label": "Pink Candy",
+            "gpName" : "pink_candy_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 62,
+            "label": "Red Reaf",
+            "gpName" : "red_reaf_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 63,
+            "label": "Aqua Flash",
+            "gpName" : "aqua_flash_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 64,
+            "label": "Yelblu Hot",
+            "gpName" : "yelblu_hot_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 65,
+            "label": "Lite Light",
+            "gpName" : "lite_light_gp",
+            "enabled" : "no",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 66,
+            "label": "Red Flash",
+            "gpName" : "red_flash_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 67,
+            "label": "Blink Red",
+            "gpName" : "blink_red_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 68,
+            "label": "Red Shift",
+            "gpName" : "red_shift_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 69,
+            "label": "Red Tide",
+            "gpName" : "red_tide_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        },
+        {
+            "index" : 70,
+            "label": "Candy2",
+            "gpName" : "candy2_gp",
+            "enabled" : "yes",
+            "tags" : [
+                "wled"
+            ]
+        }
+	]
+ }

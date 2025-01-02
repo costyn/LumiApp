@@ -1,3 +1,4 @@
+import { PaletteSelector } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
@@ -38,12 +39,9 @@ export function BackgroundCard({ params, updateParam }: BackgroundCardProps) {
                 </div>
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Palette</label>
-                    <input
-                        type="number"
+                    <PaletteSelector
                         value={params.bgPaletteIndex}
-                        onChange={(e) => updateParam('bgPaletteIndex', Number(e.target.value))}
-                        min={0} max={70}
-                        className="w-full p-2 border rounded"
+                        onChange={(value) => updateParam('bgPaletteIndex', value)}
                     />
                 </div>
             </CardContent>

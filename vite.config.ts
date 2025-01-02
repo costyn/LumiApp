@@ -25,6 +25,7 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  assetsInclude: ['**/*.json'],
   build: {
     rollupOptions: {
       output: {
