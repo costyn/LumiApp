@@ -8,7 +8,7 @@ import { ThemeToggle } from './ui/theme-toggle.tsx'
 // Update this with your ESP32's WebSocket URL
 const WS_URL = 'ws://lumifera.local/ws'
 
-// type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
+type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
 interface LumiferaParams {
     bpm: number;
@@ -25,6 +25,7 @@ interface LumiferaParams {
     rasterSpacing: number;
     autoAdvancePalette: number;
     autoAdvanceDelay: number;
+    fixMode: FixMode;
 }
 
 type ParamKey = keyof LumiferaParams;
@@ -44,7 +45,8 @@ const DEFAULT_PARAMS: LumiferaParams = {
     brightness: 150,
     rasterSpacing: 0,
     autoAdvancePalette: 1,
-    autoAdvanceDelay: 60
+    autoAdvanceDelay: 60,
+    fixMode: 'NONE'
 }
 
 export function LumiferaController() {
