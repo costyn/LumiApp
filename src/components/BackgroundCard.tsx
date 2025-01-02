@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
-import { LumiferaParams, ParamKey } from "./LumiferaController"
+import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 
 interface BackgroundCardProps {
     params: LumiferaParams
@@ -21,10 +21,7 @@ export function BackgroundCard({ params, updateParam }: BackgroundCardProps) {
                     </div>
                     <Slider
                         value={[params.bgRotSpeed]}
-                        onValueChange={(value) => {
-                            console.log('Slider change:', value);
-                            updateParam('bgRotSpeed', value[0]);
-                        }}
+                        onValueChange={(value) => { updateParam('bgRotSpeed', value[0]); }}
                         min={0} max={255} step={1}
                     />
                 </div>
@@ -35,8 +32,8 @@ export function BackgroundCard({ params, updateParam }: BackgroundCardProps) {
                     </div>
                     <Slider
                         value={[params.bgLineWidth]}
-                        onValueChange={([value]) => updateParam('bgLineWidth', value)}
-                        min={0} max={20} step={0.1}
+                        onValueChange={(value) => updateParam('bgLineWidth', value[0])}
+                        min={0} max={20} step={1}
                     />
                 </div>
                 <div className="space-y-2">

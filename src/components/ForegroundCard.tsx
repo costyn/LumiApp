@@ -1,7 +1,7 @@
+import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
-import { LumiferaParams, ParamKey } from "./LumiferaController"
 
 interface ForegroundCardProps {
     params: LumiferaParams
