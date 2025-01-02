@@ -4,11 +4,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
 import { ThemeToggle } from './ui/theme-toggle.tsx'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from './ui/select.tsx'
 
 // Update this with your ESP32's WebSocket URL
 const WS_URL = 'ws://lumifera.local/ws'
 
 type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
+
+type UserLevel = 'beginner' | 'intermediate' | 'advanced';
 
 interface LumiferaParams {
     bpm: number;
@@ -55,6 +58,8 @@ export function LumiferaController() {
     const [params, setParams] = useState<LumiferaParams>(DEFAULT_PARAMS)
     const wsRef = useRef<WebSocket | null>(null);
     const [lastChanged, setLastChanged] = useState<ParamKey | null>(null);
+    const [userLevel, setUserLevel] = useState<UserLevel>('beginner');
+
 
     const connect = () => {
         if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
@@ -220,6 +225,19 @@ export function LumiferaController() {
                             <CardDescription>Status: {wsStatus}</CardDescription>
                         </div>
                         <div className="flex gap-2">
+                            <Select
+                                value={userLevel}
+                                onValueChange={(value: UserLevel) => setUserLevel(value)}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select level" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="beginner">Beginner</SelectItem>
+                                    <SelectItem value="intermediate">Intermediate</SelectItem>
+                                    <SelectItem value="advanced">Advanced</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <ThemeToggle />
                             {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
                         </div>
@@ -246,7 +264,9 @@ export function LumiferaController() {
 
             <div className="grid md:grid-cols-2 gap-4">
                 <BackgroundCard />
-                <ForegroundCard />
+                {userLevel === 'advanced' && (
+                    <ForegroundCard />
+                )}
             </div>
         </div>
     );
