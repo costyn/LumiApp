@@ -43,7 +43,6 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="beginner">Beginner</SelectItem>
-                            <SelectItem value="intermediate">Intermediate</SelectItem>
                             <SelectItem value="advanced">Advanced</SelectItem>
                         </SelectContent>
                     </Select>
@@ -71,7 +70,6 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="beginner">Beginner</SelectItem>
-                                        <SelectItem value="intermediate">Intermediate</SelectItem>
                                         <SelectItem value="advanced">Advanced</SelectItem>
                                     </SelectContent>
                                 </Select>

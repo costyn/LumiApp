@@ -17,7 +17,12 @@ pnpm build
 ```
 
 ## TODO / Feature Wishlist
-* Buttons for blend time
+* DONE Buttons for crossfade time
 * Buttons for fix mode
 * Blend time input lockout
 * Palette dropdown/selector?
+* Alert icon when disconnected
+* Standard BPM buttons
+
+* Taptempo??
+

@@ -10,13 +10,15 @@ export default defineConfig({
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
-      filter: /\.(js|css|html|svg)$/i,
-      deleteOriginFile: true
+      filter: /\.(html)$/i,
+      deleteOriginFile: false
     }),
     {
       name: 'copy-to-esp',
       closeBundle() {
-        execSync('cp -r dist/ /Users/costyn/Developer/platformio/ledflower/data/lumiapp/')
+        execSync('cp dist/index.html /Users/costyn/Developer/platformio/ledflower/data/lumiapp/')
+        execSync('cp dist/assets/* /Users/costyn/Developer/platformio/ledflower/data/lumiapp/')
+        execSync('cp dist/vite.svg /Users/costyn/Developer/platformio/ledflower/data/lumiapp/')
       }
     },
   ],
@@ -25,7 +27,7 @@ export default defineConfig({
       '@': '/src',
     },
   },
-  assetsInclude: ['**/*.json'],
+  // assetsInclude: ['**/*.json'],
   build: {
     rollupOptions: {
       output: {

@@ -6,9 +6,12 @@ import { ForegroundCard } from './ForegroundCard'
 import { useWebSocket } from '@/hooks/useWebsocket.tsx'
 import { MainCardHeader } from './MainCardHeader.tsx'
 
+import { Button } from './ui/button.tsx';
+import { Switch } from './ui/switch.tsx'
+
 const WS_URL = 'ws://lumifera.local/ws'
 
-export type UserLevel = 'beginner' | 'intermediate' | 'advanced';
+export type UserLevel = 'beginner' | 'advanced';
 
 export function LumiferaController() {
 
@@ -42,6 +45,34 @@ export function LumiferaController() {
 
                         <Slider value={[params.brightness]} onValueChange={([value]) => updateParam('brightness', value)} min={0} max={255} step={1} />
                     </div>
+                    <div className="space-y-2">
+                        <div className="flex justify-left items-center gap-2">
+                            <label className="text-sm font-medium">Direction</label>
+                            <span className="text-sm text-muted-foreground">{params.direction}</span>
+
+                            <Switch
+                                checked={params.direction === 1}
+                                onCheckedChange={(checked) => updateParam('direction', checked ? 1 : 0)}
+                            />
+                        </div>
+                    </div>
+
+                    {userLevel === 'advanced' && (
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium">Crossfade Time</label>
+                            <div className="flex flex-wrap gap-2">
+                                {[200, 500, 1000, 2000, 4000, 8000].map((time) => (
+                                    <Button
+                                        key={time}
+                                        variant="outline"
+                                        onClick={() => updateParam('blendTime', time)}
+                                    >
+                                        {time}ms
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 
