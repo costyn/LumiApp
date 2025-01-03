@@ -7,11 +7,12 @@ import { useWebSocket } from '@/hooks/useWebsocket.tsx'
 import { MainCardHeader } from './MainCardHeader.tsx'
 
 import { Button } from './ui/button.tsx';
-import { Switch } from './ui/switch.tsx'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
 export type UserLevel = 'beginner' | 'advanced';
+const FIX_MODES = ['PAUSE', 'RADAR', 'RADIATE', 'NONE'] as const;
 
 export function LumiferaController() {
 
@@ -30,13 +31,28 @@ export function LumiferaController() {
                     isLoading={isLoading}
                 />
                 <CardContent className="space-y-4">
+                    {/* BPM  */}
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
                             <label className="text-sm font-medium">BPM</label>
                             <span className="text-sm text-muted-foreground">{params.bpm}</span>
                         </div>
                         <Slider value={[params.bpm]} onValueChange={([value]) => updateParam('bpm', value)} min={0} max={180} step={1} />
+                        {userLevel === 'advanced' && (
+                            <div className="flex flex-wrap gap-2">
+                                {[10, 30, 60, 120, 130, 140, 260].map((time) => (
+                                    <Button
+                                        key={time}
+                                        variant={params.bpm === time ? 'default' : 'outline'}
+                                        size={'sm'}
+                                        onClick={() => updateParam('bpm', time)}
+                                    >
+                                        {time}bpm
+                                    </Button>
+                                ))}
+                            </div>)}
                     </div>
+                    {/* Brightness */}
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
                             <label className="text-sm font-medium">Brightness</label>
@@ -45,18 +61,52 @@ export function LumiferaController() {
 
                         <Slider value={[params.brightness]} onValueChange={([value]) => updateParam('brightness', value)} min={0} max={255} step={1} />
                     </div>
+                    {/* Direction */}
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
                             <label className="text-sm font-medium">Direction</label>
-                            <span className="text-sm text-muted-foreground">{params.direction}</span>
+                            <div className="flex flex-wrap gap-2">
+                                <Button
+                                    key="reverse"
+                                    variant={params.direction === 0 ? 'default' : 'outline'}
+                                    onClick={() => updateParam('direction', 0)}
+                                    size="icon"
 
-                            <Switch
-                                checked={params.direction === 1}
-                                onCheckedChange={(checked) => updateParam('direction', checked ? 1 : 0)}
-                            />
+                                >
+                                    <ChevronLeft />
+                                </Button>
+
+                                <Button
+                                    key="forward"
+                                    variant={params.direction === 1 ? 'default' : 'outline'}
+                                    onClick={() => updateParam('direction', 1)}
+                                    size="icon"
+                                >
+                                    <ChevronRight />
+                                </Button>
+
+                            </div>
                         </div>
                     </div>
 
+                    {userLevel === 'advanced' && (
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium">Fix Mode</label>
+                            <div className="flex flex-wrap gap-2">
+                                {FIX_MODES.map((mode) => (
+                                    <Button
+                                        key={mode}
+                                        variant={params.fixMode === mode ? 'default' : 'outline'}
+                                        onClick={() => updateParam('fixMode', mode)}
+                                    >
+                                        {mode.charAt(0) + mode.slice(1).toLowerCase()}
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Crossfade Time */}
                     {userLevel === 'advanced' && (
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Crossfade Time</label>
@@ -64,7 +114,7 @@ export function LumiferaController() {
                                 {[200, 500, 1000, 2000, 4000, 8000].map((time) => (
                                     <Button
                                         key={time}
-                                        variant="outline"
+                                        variant={params.blendTime === time ? 'default' : 'outline'}
                                         onClick={() => updateParam('blendTime', time)}
                                     >
                                         {time}ms

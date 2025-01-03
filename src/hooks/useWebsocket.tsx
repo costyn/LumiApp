@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
+export type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
 export interface LumiferaParams {
     bpm: number;
@@ -96,7 +96,7 @@ export function useWebSocket(url: string) {
     }, []);
 
 
-    const updateParam = (name: ParamKey, value: number) => {
+    const updateParam = (name: ParamKey, value: (number | string)) => {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
         setIsLoading(true);
