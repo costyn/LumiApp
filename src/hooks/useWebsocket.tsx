@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
+export type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
 export interface LumiferaParams {
     bpm: number;
@@ -19,6 +19,7 @@ export interface LumiferaParams {
     autoAdvanceDelay: number;
     fixMode: FixMode;
     blendTime: number;
+    preset: number;
 }
 
 export type ParamKey = keyof LumiferaParams;
@@ -39,6 +40,7 @@ const DEFAULT_PARAMS: LumiferaParams = {
     autoAdvanceDelay: 60,
     fixMode: 'NONE',
     blendTime: 4000, // default blendtime in milliseconds
+    preset: 0,
 }
 
 
@@ -96,7 +98,7 @@ export function useWebSocket(url: string) {
     }, []);
 
 
-    const updateParam = (name: ParamKey, value: number) => {
+    const updateParam = (name: ParamKey, value: (number | string)) => {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
         setIsLoading(true);
@@ -105,9 +107,10 @@ export function useWebSocket(url: string) {
             window.clearTimeout(timer.current);
         }
         // Set new timer for blendTime milliseconds
+        // Use the new value if we're updating blendTime itself, otherwise uses the existing value.
         timer.current = window.setTimeout(() => {
             setIsLoading(false);
-        }, params.blendTime);
+        }, name === 'blendTime' && typeof value === 'number' ? value : params.blendTime);
     };
 
     useEffect(() => {

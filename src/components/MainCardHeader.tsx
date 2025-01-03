@@ -29,10 +29,11 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
                 <div>
                     <div className="flex items-right gap-4">
                         <CardTitle>Lumifera Controller</CardTitle>
-                        {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+                        {(isLoading || wsStatus === 'connecting') && <Loader className="h-4 w-4 animate-spin" />}
                     </div>
 
-                    <CardDescription>Status: {wsStatus}</CardDescription>
+                    <CardDescription>Status: {wsStatus} {wsStatus === 'disconnected' && "⚠️"}
+                    </CardDescription>
                 </div>
 
                 {/* Desktop Controls */}
@@ -42,7 +43,7 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
                             <SelectValue placeholder="Select level" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="beginner">Beginner</SelectItem>
+                            <SelectItem value="basic">Basic</SelectItem>
                             <SelectItem value="advanced">Advanced</SelectItem>
                         </SelectContent>
                     </Select>
@@ -69,7 +70,7 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
                                         <SelectValue placeholder="Select level" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="beginner">Beginner</SelectItem>
+                                        <SelectItem value="basic">Basic</SelectItem>
                                         <SelectItem value="advanced">Advanced</SelectItem>
                                     </SelectContent>
                                 </Select>

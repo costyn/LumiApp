@@ -17,12 +17,20 @@ pnpm build
 ```
 
 ## TODO / Feature Wishlist
-* DONE Buttons for crossfade time
-* Buttons for fix mode
+* DONE: Buttons for crossfade time
+* DONE: Buttons for fix mode
+* DONE: Alert icon when disconnected
+* DONE: Standard BPM buttons
+* DONE: Preset Buttons!
+* DONE: Disable input when not connected
+* DONE: Auto advance on/off delay slider
+
+
+### Harder
 * Blend time input lockout
 * Palette dropdown/selector?
-* Alert icon when disconnected
-* Standard BPM buttons
 
+### Hardest
+* DONE: User presets in app?
 * Taptempo??
 

@@ -9,18 +9,19 @@ interface ForegroundCardProps {
     params: LumiferaParams
     updateParam: (name: ParamKey, value: number) => void
     isLoading: boolean
+    isEnabled: boolean
 }
 
-export function ForegroundCard({ params, updateParam, isLoading }: ForegroundCardProps) {
+export function ForegroundCard({ params, updateParam, isLoading, isEnabled }: ForegroundCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>
                 <div className="flex items-right gap-4">
                     <CardTitle>Foreground</CardTitle>
-                    {isLoading && <Loader className="h-4 w-4 animate-spin" />}
                     <Switch
                         checked={params.fgAnimationEnable === 1}
                         onCheckedChange={(checked) => updateParam('fgAnimationEnable', checked ? 1 : 0)}
+                        disabled={!isEnabled}
                     />
                     <label className="text-sm font-medium">Enable Animation</label>
                 </div>
@@ -29,7 +30,7 @@ export function ForegroundCard({ params, updateParam, isLoading }: ForegroundCar
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Rotation Speed</label>
                     <Slider
-                        disabled={params.fgAnimationEnable === 0}
+                        disabled={params.fgAnimationEnable === 0 || !isEnabled}
                         value={[params.fgRotSpeed]}
                         onValueChange={([value]) => updateParam('fgRotSpeed', value)}
                         min={0} max={255} step={0.1}
@@ -38,7 +39,7 @@ export function ForegroundCard({ params, updateParam, isLoading }: ForegroundCar
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Line Width</label>
                     <Slider
-                        disabled={params.fgAnimationEnable === 0}
+                        disabled={params.fgAnimationEnable === 0 || !isEnabled}
                         value={[params.fgLineWidth]}
                         onValueChange={([value]) => updateParam('fgLineWidth', value)}
                         min={0} max={20} step={0.1}
@@ -52,8 +53,9 @@ export function ForegroundCard({ params, updateParam, isLoading }: ForegroundCar
                         </span>
                     </div>
                     <Slider
-                        value={[params.bgPaletteIndex]}
-                        onValueChange={([value]) => updateParam('bgPaletteIndex', value)}
+                        value={[params.fgPaletteIndex]}
+                        disabled={params.fgAnimationEnable === 0 || !isEnabled}
+                        onValueChange={([value]) => updateParam('fgPaletteIndex', value)}
                         min={0}
                         max={palettesData.palettes.length - 1}
                         step={1}
