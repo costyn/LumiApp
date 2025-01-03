@@ -9,14 +9,15 @@ interface BackgroundCardProps {
     updateParam: (name: ParamKey, value: number) => void
     isLoading: boolean
     isEnabled: boolean
+    userLevel: 'basic' | 'advanced'
 }
 
-export function BackgroundCard({ params, updateParam, isLoading, isEnabled }: BackgroundCardProps) {
+export function BackgroundCard({ params, updateParam, isLoading, isEnabled, userLevel }: BackgroundCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>
                 <div className="flex items-right gap-4">
-                    <CardTitle>Background</CardTitle>
+                    <CardTitle>{userLevel === 'advanced' ? 'Background Animation' : 'Animation'}</CardTitle>
                     {isLoading && <Loader className="h-4 w-4 animate-spin" />}
                 </div>
             </CardHeader>

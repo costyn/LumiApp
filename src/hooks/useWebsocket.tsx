@@ -107,9 +107,10 @@ export function useWebSocket(url: string) {
             window.clearTimeout(timer.current);
         }
         // Set new timer for blendTime milliseconds
+        // Use the new value if we're updating blendTime itself, otherwise uses the existing value.
         timer.current = window.setTimeout(() => {
             setIsLoading(false);
-        }, params.blendTime);
+        }, name === 'blendTime' && typeof value === 'number' ? value : params.blendTime);
     };
 
     useEffect(() => {

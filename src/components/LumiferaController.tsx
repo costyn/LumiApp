@@ -13,7 +13,7 @@ import { SystemPresetsCard } from './SystemPresetsCard.tsx'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
-export type UserLevel = 'beginner' | 'advanced';
+export type UserLevel = 'basic' | 'advanced';
 const FIX_MODES = [
     { mode: 'PAUSE', icon: Pause },
     { mode: 'RADAR', icon: Radar },
@@ -24,7 +24,7 @@ const FIX_MODES = [
 export function LumiferaController() {
 
     const { wsStatus, connect, params, updateParam, isLoading } = useWebSocket(WS_URL)
-    const [userLevel, setUserLevel] = useState<UserLevel>('beginner');
+    const [userLevel, setUserLevel] = useState<UserLevel>('basic');
     const isEnabled = wsStatus === 'connected';
 
     return (
@@ -161,10 +161,11 @@ export function LumiferaController() {
 
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
-                <SystemPresetsCard updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
-                <PresetCard params={params} updateParam={updateParam} isEnabled={wsStatus === 'connected'} />
+                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} userLevel={userLevel} />
                 {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />}
+                <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
+                <PresetCard params={params} updateParam={updateParam} isEnabled={wsStatus === 'connected'} />
+
             </div>
         </div>
     );

@@ -21,12 +21,14 @@ pnpm build
 * DONE: Buttons for fix mode
 * DONE: Alert icon when disconnected
 * DONE: Standard BPM buttons
-* Preset Buttons!
+* DONE: Preset Buttons!
+* DONE: Disable input when not connected
 
 ### Harder
 * Blend time input lockout
 * Palette dropdown/selector?
 
 ### Hardest
+* DONE: User presets in app?
 * Taptempo??
 

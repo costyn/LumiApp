@@ -18,7 +18,6 @@ export function ForegroundCard({ params, updateParam, isLoading, isEnabled }: Fo
             <CardHeader>
                 <div className="flex items-right gap-4">
                     <CardTitle>Foreground</CardTitle>
-                    {isLoading && <Loader className="h-4 w-4 animate-spin" />}
                     <Switch
                         checked={params.fgAnimationEnable === 1}
                         onCheckedChange={(checked) => updateParam('fgAnimationEnable', checked ? 1 : 0)}
