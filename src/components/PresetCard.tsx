@@ -23,11 +23,11 @@ interface Preset {
 
 interface PresetCardProps {
     params: LumiferaParams;
-    updateParam: (name: keyof LumiferaParams, value: any) => void;
+    updateParams: (params: LumiferaParams) => void;
     isEnabled: boolean
 }
 
-export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) {
+export function PresetCard({ params, updateParams, isEnabled }: PresetCardProps) {
     const [presets, setPresets] = useState<Preset[]>([])
     const [newPresetName, setNewPresetName] = useState('')
     const [isCreating, setIsCreating] = useState(false)
@@ -75,9 +75,7 @@ export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) 
     }
 
     const loadPreset = (preset: Preset) => {
-        Object.entries(preset.params).forEach(([key, value]) => {
-            updateParam(key as keyof LumiferaParams, value)
-        })
+        updateParams(preset.params as LumiferaParams)
     }
 
     const [presetToDelete, setPresetToDelete] = useState<number | null>(null)

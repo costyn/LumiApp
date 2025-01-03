@@ -23,7 +23,7 @@ const FIX_MODES = [
 
 export function LumiferaController() {
 
-    const { wsStatus, connect, params, updateParam, isLoading } = useWebSocket(WS_URL)
+    const { wsStatus, connect, params, updateParam, isLoading, updateParams } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>('basic');
     const isEnabled = wsStatus === 'connected';
 
@@ -168,7 +168,7 @@ export function LumiferaController() {
                 <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} userLevel={userLevel} />
                 {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />}
                 <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
-                <PresetCard params={params} updateParam={updateParam} isEnabled={wsStatus === 'connected'} />
+                <PresetCard params={params} updateParams={updateParams} isEnabled={wsStatus === 'connected'} />
 
             </div>
         </div>

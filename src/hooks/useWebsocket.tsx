@@ -85,19 +85,29 @@ export function useWebSocket(url: string) {
     };
 
     useEffect(() => {
-        connect();
-        return () => {
+        const reconnectDelay = 1000; // 1 second delay
+
+        const cleanup = () => {
             if (wsRef.current) {
                 wsRef.current.close();
                 wsRef.current = null;
             }
-            if (timer.current) {
-                window.clearTimeout(timer.current);
-            }
+        };
+
+        // Add unload handler
+        window.addEventListener('beforeunload', cleanup);
+
+        // Delayed connect
+        const timeoutId = setTimeout(connect, reconnectDelay);
+
+        return () => {
+            window.removeEventListener('beforeunload', cleanup);
+            clearTimeout(timeoutId);
+            cleanup();
         };
     }, []);
 
-
+    // Update a single param
     const updateParam = (name: ParamKey, value: (number | string)) => {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
@@ -120,5 +130,20 @@ export function useWebSocket(url: string) {
         }
     }, [params, ws, lastChanged, isLoading]);
 
-    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading }
+    // Update multiple params at once
+    const updateParams = (newParams: Partial<LumiferaParams>) => {
+        if (ws?.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(newParams));
+            setParams(prev => ({ ...prev, ...newParams }));
+            setIsLoading(true);
+            if (timer.current) {
+                window.clearTimeout(timer.current);
+            }
+            timer.current = window.setTimeout(() => {
+                setIsLoading(false);
+            }, params.blendTime);
+        }
+    };
+
+    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading, updateParams }
 }
