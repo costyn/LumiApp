@@ -7,12 +7,18 @@ import { useWebSocket } from '@/hooks/useWebsocket.tsx'
 import { MainCardHeader } from './MainCardHeader.tsx'
 
 import { Button } from './ui/button.tsx';
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Pause, Radar, Radio, X } from 'lucide-react'
+import { PresetCard } from './PresetCard.tsx'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
 export type UserLevel = 'beginner' | 'advanced';
-const FIX_MODES = ['PAUSE', 'RADAR', 'RADIATE', 'NONE'] as const;
+const FIX_MODES = [
+    { mode: 'PAUSE', icon: Pause },
+    { mode: 'RADAR', icon: Radar },
+    { mode: 'RADIATE', icon: Radio },
+    { mode: 'NONE', icon: X }
+] as const;
 
 export function LumiferaController() {
 
@@ -91,17 +97,21 @@ export function LumiferaController() {
 
                     {userLevel === 'advanced' && (
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Fix Mode</label>
-                            <div className="flex flex-wrap gap-2">
-                                {FIX_MODES.map((mode) => (
-                                    <Button
-                                        key={mode}
-                                        variant={params.fixMode === mode ? 'default' : 'outline'}
-                                        onClick={() => updateParam('fixMode', mode)}
-                                    >
-                                        {mode.charAt(0) + mode.slice(1).toLowerCase()}
-                                    </Button>
-                                ))}
+                            <div className="flex justify-left items-center gap-2">
+
+                                <label className="text-sm font-medium">Fix Mode</label>
+                                <div className="flex flex-wrap gap-2">
+                                    {FIX_MODES.map(({ mode, icon: Icon }) => (
+                                        <Button
+                                            key={mode}
+                                            variant={params.fixMode === mode ? 'default' : 'outline'}
+                                            size="icon"
+                                            onClick={() => updateParam('fixMode', mode)}
+                                        >
+                                            <Icon className="h-4 w-4" />
+                                        </Button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     )}
@@ -129,6 +139,7 @@ export function LumiferaController() {
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
                 <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} />
+                <PresetCard params={params} updateParam={updateParam} />
                 {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} />}
             </div>
         </div>
