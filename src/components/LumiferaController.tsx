@@ -68,6 +68,7 @@ export function LumiferaController() {
                                 ))}
                             </div>)}
                     </div>
+
                     {/* Brightness */}
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
@@ -84,37 +85,40 @@ export function LumiferaController() {
                             disabled={!isEnabled}
                         />
                     </div>
+
                     {/* Direction */}
-                    <div className="space-y-2">
-                        <div className="flex justify-left items-center gap-2">
-                            <label className="text-sm font-medium">Direction</label>
-                            <div className="flex flex-wrap gap-2">
-                                <Button
-                                    key="reverse"
-                                    variant={params.direction === 0 ? 'default' : 'outline'}
-                                    onClick={() => updateParam('direction', 0)}
-                                    size="icon"
-                                    disabled={!isEnabled}
+                    {userLevel === 'advanced' && (
+                        <div className="space-y-2">
+                            <div className="flex justify-left items-center gap-2">
+                                <label className="text-sm font-medium">Direction</label>
+                                <div className="flex flex-wrap gap-2">
+                                    <Button
+                                        key="reverse"
+                                        variant={params.direction === 0 ? 'default' : 'outline'}
+                                        onClick={() => updateParam('direction', 0)}
+                                        size="icon"
+                                        disabled={!isEnabled}
 
-                                >
-                                    <ChevronLeft />
-                                </Button>
+                                    >
+                                        <ChevronLeft />
+                                    </Button>
 
-                                <Button
-                                    key="forward"
-                                    variant={params.direction === 1 ? 'default' : 'outline'}
-                                    onClick={() => updateParam('direction', 1)}
-                                    size="icon"
-                                    disabled={!isEnabled}
+                                    <Button
+                                        key="forward"
+                                        variant={params.direction === 1 ? 'default' : 'outline'}
+                                        onClick={() => updateParam('direction', 1)}
+                                        size="icon"
+                                        disabled={!isEnabled}
 
-                                >
-                                    <ChevronRight />
-                                </Button>
+                                    >
+                                        <ChevronRight />
+                                    </Button>
 
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </div>)}
 
+                    {/* Fix Mode */}
                     {userLevel === 'advanced' && (
                         <div className="space-y-2">
                             <div className="flex justify-left items-center gap-2">
@@ -141,8 +145,8 @@ export function LumiferaController() {
                     {/* Crossfade Time */}
                     {userLevel === 'advanced' && (
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Crossfade Time</label>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex justify-left items-center gap-2">
+                                <label className="text-sm font-medium">Crossfade Time</label>
                                 {[200, 500, 1000, 2000, 4000, 8000].map((time) => (
                                     <Button
                                         key={time}

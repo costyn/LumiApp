@@ -40,7 +40,7 @@ export function SystemPresetsCard({ params, updateParam, isLoading, isEnabled }:
         <Card>
             <CardHeader>
                 <CardTitle>System Presets</CardTitle>
-                {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+                {/* {isLoading && <Loader className="h-4 w-4 animate-spin" />} */}
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 gap-2">

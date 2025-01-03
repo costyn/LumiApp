@@ -23,6 +23,8 @@ pnpm build
 * DONE: Standard BPM buttons
 * DONE: Preset Buttons!
 * DONE: Disable input when not connected
+* DONE: Auto advance on/off delay slider
+
 
 ### Harder
 * Blend time input lockout

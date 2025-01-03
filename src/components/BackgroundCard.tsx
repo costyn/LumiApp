@@ -3,6 +3,8 @@ import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
+import { Switch } from './ui/switch.tsx'
+import { Button } from './ui/button.tsx'
 
 interface BackgroundCardProps {
     params: LumiferaParams
@@ -39,12 +41,27 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         <label className="text-sm font-medium">Line Width</label>
                         <span className="text-sm text-muted-foreground">{params.bgLineWidth}</span>
                     </div>
+
                     <Slider
                         value={[params.bgLineWidth]}
                         disabled={!isEnabled}
                         onValueChange={(value) => updateParam('bgLineWidth', value[0])}
                         min={0} max={20} step={1}
                     />
+                    {userLevel === 'advanced' && (
+                        <div className="flex flex-wrap gap-2">
+                            {[2, 4, 8].map((width) => (
+                                <Button
+                                    key={width}
+                                    variant={params.bgLineWidth === width ? 'default' : 'outline'}
+                                    size={'sm'}
+                                    onClick={() => updateParam('bgLineWidth', width)}
+                                    disabled={!isEnabled}
+                                >
+                                    {width}
+                                </Button>
+                            ))}
+                        </div>)}
                 </div>
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">
@@ -61,6 +78,31 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         max={palettesData.palettes.length - 1}
                         step={1}
                     />
+                </div>
+                <div className="space-y-2">
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Palette Auto Mode</label>
+                        <Switch
+                            checked={params.autoAdvancePalette === 1}
+                            onCheckedChange={(checked) => updateParam('autoAdvancePalette', checked ? 1 : 0)}
+                            disabled={!isEnabled}
+                        />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <div className="flex justify-left items-center gap-2">
+                        <label className="text-sm font-medium">Palette Auto Mode Delay</label>
+                        <span className="text-sm text-muted-foreground">{params.autoAdvanceDelay} sec</span>
+                    </div>
+                    <Slider
+                        value={[params.autoAdvanceDelay]}
+                        disabled={!isEnabled || params.autoAdvancePalette === 0}
+                        onValueChange={([value]) => updateParam('autoAdvanceDelay', value)}
+                        min={0}
+                        max={300}
+                        step={1}
+                    />
+
                 </div>
             </CardContent>
         </Card>

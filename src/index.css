@@ -62,6 +62,10 @@
   }
 }
 
+[role="switch"] span {
+  @apply bg-white dark:bg-white;
+}
+
 [data-disabled] .SliderTrack {
   @apply bg-muted;
 }
