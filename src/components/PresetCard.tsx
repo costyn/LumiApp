@@ -1,6 +1,16 @@
 import { Save, Plus, Trash2 } from 'lucide-react'
 import { Button } from './ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from '@/components/ui/alert-dialog'
 import { Input } from './ui/input'
 import { useState, useEffect } from 'react'
 import { LumiferaParams } from '@/hooks/useWebsocket'
@@ -69,8 +79,17 @@ export function PresetCard({ params, updateParam }: PresetCardProps) {
         })
     }
 
+    const [presetToDelete, setPresetToDelete] = useState<number | null>(null)
+
     const deletePreset = (index: number) => {
-        setPresets(prev => prev.filter((_, i) => i !== index))
+        setPresetToDelete(index)
+    }
+
+    const confirmDelete = () => {
+        if (presetToDelete !== null) {
+            setPresets(prev => prev.filter((_, i) => i !== presetToDelete))
+            setPresetToDelete(null)
+        }
     }
 
     return (
@@ -99,6 +118,21 @@ export function PresetCard({ params, updateParam }: PresetCardProps) {
                         </div>
                     ))}
                 </div>
+
+                <AlertDialog open={presetToDelete !== null} onOpenChange={() => setPresetToDelete(null)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Preset</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Are you sure you want to delete this preset? This action cannot be undone.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
 
                 {isCreating ? (
                     <div className="mt-4 flex gap-2">
