@@ -8,10 +8,10 @@ interface BackgroundCardProps {
     params: LumiferaParams
     updateParam: (name: ParamKey, value: number) => void
     isLoading: boolean
-
+    isEnabled: boolean
 }
 
-export function BackgroundCard({ params, updateParam, isLoading }: BackgroundCardProps) {
+export function BackgroundCard({ params, updateParam, isLoading, isEnabled }: BackgroundCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>
@@ -28,6 +28,7 @@ export function BackgroundCard({ params, updateParam, isLoading }: BackgroundCar
                     </div>
                     <Slider
                         value={[params.bgRotSpeed]}
+                        disabled={!isEnabled}
                         onValueChange={(value) => { updateParam('bgRotSpeed', value[0]); }}
                         min={0} max={255} step={1}
                     />
@@ -39,6 +40,7 @@ export function BackgroundCard({ params, updateParam, isLoading }: BackgroundCar
                     </div>
                     <Slider
                         value={[params.bgLineWidth]}
+                        disabled={!isEnabled}
                         onValueChange={(value) => updateParam('bgLineWidth', value[0])}
                         min={0} max={20} step={1}
                     />
@@ -52,6 +54,7 @@ export function BackgroundCard({ params, updateParam, isLoading }: BackgroundCar
                     </div>
                     <Slider
                         value={[params.bgPaletteIndex]}
+                        disabled={!isEnabled}
                         onValueChange={([value]) => updateParam('bgPaletteIndex', value)}
                         min={0}
                         max={palettesData.palettes.length - 1}

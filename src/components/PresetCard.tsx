@@ -24,9 +24,10 @@ interface Preset {
 interface PresetCardProps {
     params: LumiferaParams;
     updateParam: (name: keyof LumiferaParams, value: any) => void;
+    isEnabled: boolean
 }
 
-export function PresetCard({ params, updateParam }: PresetCardProps) {
+export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) {
     const [presets, setPresets] = useState<Preset[]>([])
     const [newPresetName, setNewPresetName] = useState('')
     const [isCreating, setIsCreating] = useState(false)
@@ -95,7 +96,7 @@ export function PresetCard({ params, updateParam }: PresetCardProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Presets</CardTitle>
+                <CardTitle>User Presets</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -105,6 +106,7 @@ export function PresetCard({ params, updateParam }: PresetCardProps) {
                                 variant="outline"
                                 className="flex-1"
                                 onClick={() => loadPreset(preset)}
+                                disabled={!isEnabled}
                             >
                                 {preset.name}
                             </Button>
@@ -151,6 +153,7 @@ export function PresetCard({ params, updateParam }: PresetCardProps) {
                         variant="outline"
                         className="mt-4"
                         onClick={() => setIsCreating(true)}
+                        disabled={!isEnabled}
                     >
                         <Plus className="h-4 w-4 mr-2" />
                         New Preset

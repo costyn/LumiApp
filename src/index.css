@@ -61,3 +61,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+[data-disabled] .SliderTrack {
+  @apply bg-muted;
+}
+
+[data-disabled] .SliderThumb {
+  @apply bg-muted-foreground border-muted;
+}
+
+[data-disabled] {
+  @apply opacity-50 cursor-not-allowed;
+}

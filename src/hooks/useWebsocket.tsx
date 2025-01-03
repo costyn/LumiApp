@@ -19,6 +19,7 @@ export interface LumiferaParams {
     autoAdvanceDelay: number;
     fixMode: FixMode;
     blendTime: number;
+    preset: number;
 }
 
 export type ParamKey = keyof LumiferaParams;
@@ -39,6 +40,7 @@ const DEFAULT_PARAMS: LumiferaParams = {
     autoAdvanceDelay: 60,
     fixMode: 'NONE',
     blendTime: 4000, // default blendtime in milliseconds
+    preset: 0,
 }
 
 

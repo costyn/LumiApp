@@ -9,6 +9,7 @@ import { MainCardHeader } from './MainCardHeader.tsx'
 import { Button } from './ui/button.tsx';
 import { ChevronLeft, ChevronRight, Pause, Radar, Radio, X } from 'lucide-react'
 import { PresetCard } from './PresetCard.tsx'
+import { SystemPresetsCard } from './SystemPresetsCard.tsx'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
@@ -24,6 +25,7 @@ export function LumiferaController() {
 
     const { wsStatus, connect, params, updateParam, isLoading } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>('beginner');
+    const isEnabled = wsStatus === 'connected';
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto p-4">
@@ -43,7 +45,14 @@ export function LumiferaController() {
                             <label className="text-sm font-medium">BPM</label>
                             <span className="text-sm text-muted-foreground">{params.bpm}</span>
                         </div>
-                        <Slider value={[params.bpm]} onValueChange={([value]) => updateParam('bpm', value)} min={0} max={180} step={1} />
+                        <Slider
+                            value={[params.bpm]}
+                            onValueChange={([value]) => updateParam('bpm', value)}
+                            min={0}
+                            max={180}
+                            step={1}
+                            disabled={!isEnabled}
+                        />
                         {userLevel === 'advanced' && (
                             <div className="flex flex-wrap gap-2">
                                 {[10, 30, 60, 120, 130, 140, 260].map((time) => (
@@ -52,6 +61,7 @@ export function LumiferaController() {
                                         variant={params.bpm === time ? 'default' : 'outline'}
                                         size={'sm'}
                                         onClick={() => updateParam('bpm', time)}
+                                        disabled={!isEnabled}
                                     >
                                         {time}bpm
                                     </Button>
@@ -65,7 +75,14 @@ export function LumiferaController() {
                             <span className="text-sm text-muted-foreground">{params.brightness}</span>
                         </div>
 
-                        <Slider value={[params.brightness]} onValueChange={([value]) => updateParam('brightness', value)} min={0} max={255} step={1} />
+                        <Slider
+                            value={[params.brightness]}
+                            onValueChange={([value]) => updateParam('brightness', value)}
+                            min={0}
+                            max={255}
+                            step={1}
+                            disabled={!isEnabled}
+                        />
                     </div>
                     {/* Direction */}
                     <div className="space-y-2">
@@ -77,6 +94,7 @@ export function LumiferaController() {
                                     variant={params.direction === 0 ? 'default' : 'outline'}
                                     onClick={() => updateParam('direction', 0)}
                                     size="icon"
+                                    disabled={!isEnabled}
 
                                 >
                                     <ChevronLeft />
@@ -87,6 +105,8 @@ export function LumiferaController() {
                                     variant={params.direction === 1 ? 'default' : 'outline'}
                                     onClick={() => updateParam('direction', 1)}
                                     size="icon"
+                                    disabled={!isEnabled}
+
                                 >
                                     <ChevronRight />
                                 </Button>
@@ -107,6 +127,8 @@ export function LumiferaController() {
                                             variant={params.fixMode === mode ? 'default' : 'outline'}
                                             size="icon"
                                             onClick={() => updateParam('fixMode', mode)}
+                                            disabled={!isEnabled}
+
                                         >
                                             <Icon className="h-4 w-4" />
                                         </Button>
@@ -126,6 +148,7 @@ export function LumiferaController() {
                                         key={time}
                                         variant={params.blendTime === time ? 'default' : 'outline'}
                                         onClick={() => updateParam('blendTime', time)}
+                                        disabled={!isEnabled}
                                     >
                                         {time}ms
                                     </Button>
@@ -138,9 +161,10 @@ export function LumiferaController() {
 
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} />
-                <PresetCard params={params} updateParam={updateParam} />
-                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} />}
+                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
+                <SystemPresetsCard updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
+                <PresetCard params={params} updateParam={updateParam} isEnabled={wsStatus === 'connected'} />
+                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />}
             </div>
         </div>
     );
