@@ -12,22 +12,26 @@ import {
     DialogDescription,
     DialogTrigger
 } from "@/components/ui/dialog"
-import { UserLevel } from '@/types/lumifera.ts'
-import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
+import { SharedCardProps, UserLevel } from '@/types/lumifera.ts'
 import { USER_LEVELS } from '@/types/lumifera.ts'
+import { PowerButton } from './PowerButton.tsx'
 
-interface MainCardHeaderProps {
-    params: LumiferaParams
-    wsStatus: string
-    connect: () => void
-    userLevel: string
-    setUserLevel: (level: UserLevel) => void
-    isLoading: boolean
-    isEnabled: boolean
-    updateParam: (name: ParamKey, value: number) => void
+interface MainCardHeaderProps extends SharedCardProps {
+    connect: () => void;
+    setUserLevel: (level: UserLevel) => void;
 }
 
-export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLevel, isLoading, updateParam }: MainCardHeaderProps) {
+export function MainCardHeader({
+    connect,
+    setUserLevel,
+    params,
+    wsStatus,
+    userLevel,
+    isLoading,
+    isEnabled,
+    updateParam,
+    updateParams
+}: MainCardHeaderProps) {
     return (<>
         <CardHeader>
             <div className="flex justify-between items-center">
@@ -53,17 +57,13 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
 
                 {/* Desktop Controls */}
                 <div className="hidden md:flex gap-2">
-                    <Button
-                        key="reverse"
-                        variant={params.powerState === 1 ? 'default' : 'outline'}
-                        onClick={() => {
-                            updateParam('powerState', params.powerState === 1 ? 0 : 1)
-                        }}
-                        size="default"
-                        disabled={wsStatus !== 'connected'}
-                    >
-                        <Power />
-                    </Button>
+                    <PowerButton params={params} updateParam={updateParam} wsStatus={wsStatus} isEnabled={isEnabled} updateParams={updateParams} />
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            The power button will turn off the LEDs and on selected models also turn off the power supply.
+                            Toggle it back on to resume.
+                        </p>
+                    )}
                     <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select level" />
@@ -92,6 +92,13 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
                         </DialogHeader>
                         <div className="flex flex-col gap-6 py-4">
                             <div className="space-y-4">
+                                <PowerButton params={params} updateParam={updateParam} wsStatus={wsStatus} isEnabled={isEnabled} updateParams={updateParams} />
+                                {userLevel === USER_LEVELS.BASIC_HELP && (
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                        The power button will turn off the LEDs and on selected models also turn off the power supply.
+                                        Toggle it back on to resume.
+                                    </p>
+                                )}
                                 <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select level" />

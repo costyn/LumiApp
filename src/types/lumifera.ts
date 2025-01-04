@@ -23,4 +23,5 @@ export interface SharedCardProps {
     isLoading?: boolean;
     isEnabled: boolean;
     userLevel?: UserLevel;
+    wsStatus: string;
 };

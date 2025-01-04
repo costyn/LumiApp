@@ -15,12 +15,11 @@ export default defineConfig({
         assetsDir: '',
         rollupOptions: {
             output: {
-                manualChunks: undefined,
-                entryFileNames: '[name].js',
-                chunkFileNames: '[name].js',
-                assetFileNames: '[name].[ext]',
-            },
-        },
+                entryFileNames: '[name]-[hash].js',
+                chunkFileNames: '[name]-[hash].js',
+                assetFileNames: '[name]-[hash].[ext]'
+            }
+        }
     },
     plugins: [
         react(),
@@ -28,18 +27,26 @@ export default defineConfig({
             algorithm: 'gzip',
             ext: '.gz',
             filter: /\.(html|js|css|json)$/i,
-            deleteOriginFile: false,
+            deleteOriginFile: false
         }),
         {
             name: 'copy-to-esp',
             closeBundle() {
+                // skip if build failed
                 if (!fs.existsSync('dist') || fs.readdirSync('dist').length === 0) {
                     console.warn('No dist output found – skipping copy.');
                     return;
                 }
+                // remove old
                 execSync('rm -rf /Users/costyn/Developer/platformio/ledflower/data/lumiapp/*');
-                execSync('cp dist/* /Users/costyn/Developer/platformio/ledflower/data/lumiapp/');
-            },
-        },
-    ],
+                // copy new hashed files & gz
+                try {
+                    execSync('cp dist/*.* dist/*.gz /Users/costyn/Developer/platformio/ledflower/data/lumiapp/');
+                }
+                catch {
+                    // if any pattern has no matches, ignore
+                }
+            }
+        }
+    ]
 });

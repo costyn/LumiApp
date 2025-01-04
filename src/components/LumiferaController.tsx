@@ -25,7 +25,8 @@ export function LumiferaController() {
         updateParams,
         isLoading,
         isEnabled,
-        userLevel
+        userLevel,
+        wsStatus
     }
 
     return (
@@ -33,14 +34,9 @@ export function LumiferaController() {
             {/* Main Card */}
             <Card>
                 <MainCardHeader
-                    params={params}
-                    wsStatus={wsStatus}
                     connect={connect}
-                    userLevel={userLevel}
                     setUserLevel={setUserLevel}
-                    isLoading={isLoading}
-                    isEnabled={isEnabled}
-                    updateParam={updateParam}
+                    {...sharedProps}
                 />
                 <CardContent className="space-y-4">
                     {/* BPM  */}
@@ -111,8 +107,7 @@ export function LumiferaController() {
                                         variant={params.direction === -1 ? 'default' : 'outline'}
                                         onClick={() => updateParam('direction', -1)}
                                         size="icon"
-                                        disabled={!isEnabled}
-
+                                        disabled={!isEnabled || params.fixMode === 'RADAR'} // TODO: Radar direction not yet working on Lumi
                                     >
                                         <ChevronLeft />
                                     </Button>
@@ -159,7 +154,7 @@ export function LumiferaController() {
                     {/* Crossfade Time */}
                     {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
-                            <div className="flex justify-left items-center gap-2">
+                            <div className="flex flex-wrap justify-left items-center gap-2">
                                 <label className="text-sm font-medium">Crossfade Time</label>
                                 {[200, 500, 1000, 2000, 4000, 8000].map((time) => (
                                     <Button

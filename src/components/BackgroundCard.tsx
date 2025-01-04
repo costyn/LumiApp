@@ -1,4 +1,4 @@
-import { Loader } from 'lucide-react'
+import { Forward, Loader, StepForward } from 'lucide-react'
 import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
@@ -137,6 +137,31 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                     )}
 
                 </div>
+                <div className="space-y-2">
+                    <div className="flex justify-left items-center gap-2">
+
+                        <label className="text-sm font-medium">Instant Next Palette</label>
+                        <div className="flex justify-left items-center gap-2">
+                            <Button
+                                key="nextPalette"
+                                variant={'outline'}
+                                onClick={() => {
+                                    updateParam('nextPalette', 1)
+                                }}
+                                size="default"
+                                disabled={!isEnabled}
+                            >
+                                <StepForward />
+                            </Button>
+                        </div>
+                    </div>
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            Getting bored of these colors and don't want to wait? Click the button to instantly switch to the next palette.
+                        </p>
+                    )}
+                </div>
+
             </CardContent>
         </Card>
     );
