@@ -1,4 +1,3 @@
-import { Loader } from 'lucide-react';
 import { Button } from './ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { LumiferaParams } from '@/hooks/useWebsocket'
@@ -13,15 +12,15 @@ const SYSTEM_PRESETS = [
     // 'Simmering'
 ] as const;
 
-const SYSTEM_PRESETS_CLAUDE = [
-    'Rainbow Flow',
-    'Night Pulse',
-    'Ocean Waves',
-    'Forest Glow',
-    'Sunset Fade',
-    'Storm Flash',
-    'Calm Drift'
-] as const;
+// const SYSTEM_PRESETS_CLAUDE = [
+//     'Rainbow Flow',
+//     'Night Pulse',
+//     'Ocean Waves',
+//     'Forest Glow',
+//     'Sunset Fade',
+//     'Storm Flash',
+//     'Calm Drift'
+// ] as const;
 
 
 interface SystemPresetsCardProps {
@@ -31,7 +30,7 @@ interface SystemPresetsCardProps {
     isEnabled: boolean;
 }
 
-export function SystemPresetsCard({ params, updateParam, isLoading, isEnabled }: SystemPresetsCardProps) {
+export function SystemPresetsCard({ params, updateParam, isEnabled }: SystemPresetsCardProps) {
     const loadSystemPreset = (index: number) => {
         updateParam('preset', index);
     }

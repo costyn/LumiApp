@@ -7,24 +7,16 @@ import { useWebSocket } from '@/hooks/useWebsocket.tsx'
 import { MainCardHeader } from './MainCardHeader.tsx'
 
 import { Button } from './ui/button.tsx';
-import { ChevronLeft, ChevronRight, Pause, Radar, Radio, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { PresetCard } from './PresetCard.tsx'
 import { SystemPresetsCard } from './SystemPresetsCard.tsx'
+import { FIX_MODES, USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
-export type UserLevel = 'basic' | 'advanced';
-const FIX_MODES = [
-    { mode: 'PAUSE', icon: Pause },
-    { mode: 'RADAR', icon: Radar },
-    { mode: 'RADIATE', icon: Radio },
-    { mode: 'NONE', icon: X }
-] as const;
-
 export function LumiferaController() {
-
     const { wsStatus, connect, params, updateParam, isLoading, updateParams } = useWebSocket(WS_URL)
-    const [userLevel, setUserLevel] = useState<UserLevel>('basic');
+    const [userLevel, setUserLevel] = useState<UserLevel>(USER_LEVELS.BASIC);
     const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
 
     return (
@@ -56,7 +48,7 @@ export function LumiferaController() {
                             step={1}
                             disabled={!isEnabled}
                         />
-                        {userLevel === 'advanced' && (
+                        {userLevel === USER_LEVELS.ADVANCED && (
                             <div className="flex flex-wrap gap-2">
                                 {[10, 30, 60, 120, 130, 140, 260].map((time) => (
                                     <Button
@@ -90,7 +82,7 @@ export function LumiferaController() {
                     </div>
 
                     {/* Direction */}
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
                             <div className="flex justify-left items-center gap-2">
                                 <label className="text-sm font-medium">Direction</label>
@@ -122,7 +114,7 @@ export function LumiferaController() {
                         </div>)}
 
                     {/* Fix Mode */}
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
                             <div className="flex justify-left items-center gap-2">
 
@@ -146,7 +138,7 @@ export function LumiferaController() {
                     )}
 
                     {/* Crossfade Time */}
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
                             <div className="flex justify-left items-center gap-2">
                                 <label className="text-sm font-medium">Crossfade Time</label>
@@ -169,7 +161,7 @@ export function LumiferaController() {
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
                 <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} userLevel={userLevel} />
-                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />}
+                {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />}
                 <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />
                 <PresetCard params={params} updateParams={updateParams} isEnabled={isEnabled} />
 

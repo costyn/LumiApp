@@ -5,13 +5,14 @@ import { Slider } from './ui/slider.tsx'
 import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 import { Switch } from './ui/switch.tsx'
 import { Button } from './ui/button.tsx'
+import { USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
 
 interface BackgroundCardProps {
     params: LumiferaParams
     updateParam: (name: ParamKey, value: number) => void
     isLoading: boolean
     isEnabled: boolean
-    userLevel: 'basic' | 'advanced'
+    userLevel: UserLevel
 }
 
 export function BackgroundCard({ params, updateParam, isLoading, isEnabled, userLevel }: BackgroundCardProps) {
@@ -19,7 +20,7 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
         <Card className="h-full">
             <CardHeader>
                 <div className="flex items-right gap-4">
-                    <CardTitle>{userLevel === 'advanced' ? 'Background Animation' : 'Animation'}</CardTitle>
+                    <CardTitle>{userLevel === USER_LEVELS.ADVANCED ? 'Background Animation' : 'Animation'}</CardTitle>
                     {isLoading && <Loader className="h-4 w-4 animate-spin" />}
                 </div>
             </CardHeader>
@@ -48,7 +49,7 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         onValueChange={(value) => updateParam('bgLineWidth', value[0])}
                         min={0} max={20} step={1}
                     />
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="flex flex-wrap gap-2">
                             {[2, 4, 8].map((width) => (
                                 <Button
@@ -78,7 +79,7 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         max={palettesData.palettes.length - 1}
                         step={1}
                     />
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="flex flex-wrap gap-2">
                             {[7, 60].map((bgPaletteIndex) => (
                                 <Button

@@ -3,7 +3,6 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
 import { palettesData } from './PaletteSelector.tsx'
-import { Loader } from 'lucide-react'
 
 interface ForegroundCardProps {
     params: LumiferaParams
@@ -12,7 +11,7 @@ interface ForegroundCardProps {
     isEnabled: boolean
 }
 
-export function ForegroundCard({ params, updateParam, isLoading, isEnabled }: ForegroundCardProps) {
+export function ForegroundCard({ params, updateParam, isEnabled }: ForegroundCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>

@@ -42,7 +42,7 @@ const DEFAULT_PARAMS: LumiferaParams = {
     fixMode: 'NONE',
     blendTime: 4000, // default blendtime in milliseconds
     preset: 0,
-    powerState: 0
+    powerState: 1
 }
 
 

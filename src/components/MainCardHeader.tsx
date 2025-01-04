@@ -12,8 +12,9 @@ import {
     DialogDescription,
     DialogTrigger
 } from "@/components/ui/dialog"
-import { UserLevel } from './LumiferaController.tsx'
+import { UserLevel } from '@/types/lumifera.ts'
 import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
+import { USER_LEVELS } from '@/types/lumifera.ts'
 
 interface MainCardHeaderProps {
     params: LumiferaParams
@@ -26,7 +27,7 @@ interface MainCardHeaderProps {
     updateParam: (name: ParamKey, value: number) => void
 }
 
-export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLevel, isLoading, isEnabled, updateParam }: MainCardHeaderProps) {
+export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLevel, isLoading, updateParam }: MainCardHeaderProps) {
     return (<>
         <CardHeader>
             <div className="flex justify-between items-center">
@@ -36,13 +37,17 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
                         {(isLoading || wsStatus === 'connecting') && <Loader className="h-4 w-4 animate-spin" />}
                     </div>
 
-                    <CardDescription>Status: {wsStatus} {wsStatus === 'disconnected' && "⚠️"}
+                    <CardDescription>
+                        Status: {wsStatus}
+                        {wsStatus === 'connected' &&
+                            `${params.powerState === 0 ? " & powered off ⚠️" : " & powered on"}`
+                        }
+                        {wsStatus === 'disconnected' && " ⚠️"}
                     </CardDescription>
                 </div>
 
                 {/* Desktop Controls */}
                 <div className="hidden md:flex gap-2">
-                    {params.powerState === 0 && '⚠️'}
                     <Button
                         key="reverse"
                         variant={params.powerState === 1 ? 'default' : 'outline'}
@@ -59,8 +64,9 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
                             <SelectValue placeholder="Select level" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="basic">Basic</SelectItem>
-                            <SelectItem value="advanced">Advanced</SelectItem>
+                            <SelectItem value={USER_LEVELS.BASIC}>Basic</SelectItem>
+                            <SelectItem value={USER_LEVELS.BASIC_HELP}>Basic Help</SelectItem>
+                            <SelectItem value={USER_LEVELS.ADVANCED}>Advanced</SelectItem>
                         </SelectContent>
                     </Select>
                     <ThemeToggle />
@@ -86,8 +92,9 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
                                         <SelectValue placeholder="Select level" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="basic">Basic</SelectItem>
-                                        <SelectItem value="advanced">Advanced</SelectItem>
+                                        <SelectItem value={USER_LEVELS.BASIC}>Basic</SelectItem>
+                                        <SelectItem value={USER_LEVELS.BASIC_HELP}>Basic Help</SelectItem>
+                                        <SelectItem value={USER_LEVELS.ADVANCED}>Advanced</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <ThemeToggle />
@@ -97,7 +104,7 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
                     </DialogContent>
                 </Dialog>
             </div>
-        </CardHeader>
+        </CardHeader >
     </>
     );
 
