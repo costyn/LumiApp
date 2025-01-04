@@ -3,7 +3,7 @@ import { Button } from './ui/button.tsx'
 import { CardHeader, CardTitle, CardDescription } from './ui/card.tsx'
 import { ThemeToggle } from './ui/theme-toggle.tsx'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from './ui/select.tsx'
-import { Loader, Menu } from "lucide-react"
+import { Loader, Menu, Power } from "lucide-react"
 import {
     Dialog,
     DialogContent,
@@ -13,16 +13,20 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog"
 import { UserLevel } from './LumiferaController.tsx'
+import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 
 interface MainCardHeaderProps {
+    params: LumiferaParams
     wsStatus: string
     connect: () => void
     userLevel: string
     setUserLevel: (level: UserLevel) => void
     isLoading: boolean
+    isEnabled: boolean
+    updateParam: (name: ParamKey, value: number) => void
 }
 
-export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isLoading }: MainCardHeaderProps) {
+export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLevel, isLoading, isEnabled, updateParam }: MainCardHeaderProps) {
     return (<>
         <CardHeader>
             <div className="flex justify-between items-center">
@@ -38,6 +42,18 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
 
                 {/* Desktop Controls */}
                 <div className="hidden md:flex gap-2">
+                    {params.powerState === 0 && '⚠️'}
+                    <Button
+                        key="reverse"
+                        variant={params.powerState === 1 ? 'default' : 'outline'}
+                        onClick={() => {
+                            updateParam('powerState', params.powerState === 1 ? 0 : 1)
+                        }}
+                        size="default"
+                        disabled={wsStatus !== 'connected'}
+                    >
+                        <Power />
+                    </Button>
                     <Select value={userLevel} onValueChange={(value: UserLevel) => setUserLevel(value)}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select level" />
@@ -48,7 +64,7 @@ export function MainCardHeader({ wsStatus, connect, userLevel, setUserLevel, isL
                         </SelectContent>
                     </Select>
                     <ThemeToggle />
-                    {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                    {wsStatus === 'disconnected' && <Button onClick={connect} size="default">Reconnect</Button>}
                 </div>
 
                 {/* Mobile Menu */}

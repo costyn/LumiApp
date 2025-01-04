@@ -147,15 +147,20 @@ export function PresetCard({ params, updateParams, isEnabled }: PresetCardProps)
                         </Button>
                     </div>
                 ) : (
-                    <Button
-                        variant="outline"
-                        className="mt-4"
-                        onClick={() => setIsCreating(true)}
-                        disabled={!isEnabled}
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        New Preset
-                    </Button>
+                    <>
+                        <Button
+                            variant="outline"
+                            className="mt-4"
+                            onClick={() => setIsCreating(true)}
+                            disabled={!isEnabled}
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            New Preset
+                        </Button>
+                        <p className="text-xs text-muted-foreground mt-2">
+                            User presets are saved locally and won't sync between devices
+                        </p>
+                    </>
                 )}
             </CardContent>
         </Card>

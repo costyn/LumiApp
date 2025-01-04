@@ -25,18 +25,21 @@ export function LumiferaController() {
 
     const { wsStatus, connect, params, updateParam, isLoading, updateParams } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>('basic');
-    const isEnabled = wsStatus === 'connected';
+    const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto p-4">
             {/* Main Card */}
             <Card>
                 <MainCardHeader
+                    params={params}
                     wsStatus={wsStatus}
                     connect={connect}
                     userLevel={userLevel}
                     setUserLevel={setUserLevel}
                     isLoading={isLoading}
+                    isEnabled={isEnabled}
+                    updateParam={updateParam}
                 />
                 <CardContent className="space-y-4">
                     {/* BPM  */}
@@ -165,10 +168,10 @@ export function LumiferaController() {
 
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} userLevel={userLevel} />
-                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />}
-                <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
-                <PresetCard params={params} updateParams={updateParams} isEnabled={wsStatus === 'connected'} />
+                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} userLevel={userLevel} />
+                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />}
+                <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />
+                <PresetCard params={params} updateParams={updateParams} isEnabled={isEnabled} />
 
             </div>
         </div>

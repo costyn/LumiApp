@@ -78,6 +78,20 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         max={palettesData.palettes.length - 1}
                         step={1}
                     />
+                    {userLevel === 'advanced' && (
+                        <div className="flex flex-wrap gap-2">
+                            {[7, 60].map((bgPaletteIndex) => (
+                                <Button
+                                    key={bgPaletteIndex}
+                                    variant={params.bgPaletteIndex === bgPaletteIndex ? 'default' : 'outline'}
+                                    size={'sm'}
+                                    onClick={() => updateParam('bgPaletteIndex', bgPaletteIndex)}
+                                    disabled={!isEnabled}
+                                >
+                                    {bgPaletteIndex}
+                                </Button>
+                            ))}
+                        </div>)}
                 </div>
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">

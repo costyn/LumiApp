@@ -20,6 +20,7 @@ export interface LumiferaParams {
     fixMode: FixMode;
     blendTime: number;
     preset: number;
+    powerState: number;
 }
 
 export type ParamKey = keyof LumiferaParams;
@@ -41,6 +42,7 @@ const DEFAULT_PARAMS: LumiferaParams = {
     fixMode: 'NONE',
     blendTime: 4000, // default blendtime in milliseconds
     preset: 0,
+    powerState: 0
 }
 
 
