@@ -1,17 +1,10 @@
-import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
 import { palettesData } from './PaletteSelector.tsx'
+import { SharedCardProps } from '@/types/lumifera.ts'
 
-interface ForegroundCardProps {
-    params: LumiferaParams
-    updateParam: (name: ParamKey, value: number) => void
-    isLoading: boolean
-    isEnabled: boolean
-}
-
-export function ForegroundCard({ params, updateParam, isEnabled }: ForegroundCardProps) {
+export function ForegroundCard({ params, updateParam, isEnabled }: SharedCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>

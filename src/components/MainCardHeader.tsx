@@ -44,6 +44,11 @@ export function MainCardHeader({ params, wsStatus, connect, userLevel, setUserLe
                         }
                         {wsStatus === 'disconnected' && " ⚠️"}
                     </CardDescription>
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            The status text shows the current connection status to Lumifera and power state.
+                        </p>
+                    )}
                 </div>
 
                 {/* Desktop Controls */}

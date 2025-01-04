@@ -10,7 +10,7 @@ import { Button } from './ui/button.tsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { PresetCard } from './PresetCard.tsx'
 import { SystemPresetsCard } from './SystemPresetsCard.tsx'
-import { FIX_MODES, USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
+import { FIX_MODES, SharedCardProps, USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
@@ -18,6 +18,15 @@ export function LumiferaController() {
     const { wsStatus, connect, params, updateParam, isLoading, updateParams } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>(USER_LEVELS.BASIC);
     const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
+
+    const sharedProps: SharedCardProps = {
+        params,
+        updateParam,
+        updateParams,
+        isLoading,
+        isEnabled,
+        userLevel
+    }
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto p-4">
@@ -62,6 +71,11 @@ export function LumiferaController() {
                                     </Button>
                                 ))}
                             </div>)}
+                        {userLevel === USER_LEVELS.BASIC_HELP && (
+                            <p className="text-xs text-muted-foreground mt-2">
+                                BPM controls the speed of the animation. The higher the BPM, the faster the animation.
+                            </p>
+                        )}
                     </div>
 
                     {/* Brightness */}
@@ -79,6 +93,11 @@ export function LumiferaController() {
                             step={1}
                             disabled={!isEnabled}
                         />
+                        {userLevel === USER_LEVELS.BASIC_HELP && (
+                            <p className="text-xs text-muted-foreground mt-2">
+                                Brightness controls the overall brightness of the LEDs. At lower levels the difference is more visible.
+                            </p>
+                        )}
                     </div>
 
                     {/* Direction */}
@@ -160,10 +179,10 @@ export function LumiferaController() {
 
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} userLevel={userLevel} />
-                {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />}
-                <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={isEnabled} />
-                <PresetCard params={params} updateParams={updateParams} isEnabled={isEnabled} />
+                <BackgroundCard {...sharedProps} />
+                {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard {...sharedProps} />}
+                <SystemPresetsCard {...sharedProps} />
+                <PresetCard {...sharedProps} />
 
             </div>
         </div>

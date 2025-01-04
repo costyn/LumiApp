@@ -2,20 +2,11 @@ import { Loader } from 'lucide-react'
 import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
-import { LumiferaParams, ParamKey } from '@/hooks/useWebsocket.tsx'
 import { Switch } from './ui/switch.tsx'
 import { Button } from './ui/button.tsx'
-import { USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
+import { USER_LEVELS, UserLevel, SharedCardProps } from '@/types/lumifera.ts'
 
-interface BackgroundCardProps {
-    params: LumiferaParams
-    updateParam: (name: ParamKey, value: number) => void
-    isLoading: boolean
-    isEnabled: boolean
-    userLevel: UserLevel
-}
-
-export function BackgroundCard({ params, updateParam, isLoading, isEnabled, userLevel }: BackgroundCardProps) {
+export function BackgroundCard({ params, updateParam, isLoading, isEnabled, userLevel }: SharedCardProps) {
     return (
         <Card className="h-full">
             <CardHeader>
@@ -36,6 +27,11 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         onValueChange={(value) => { updateParam('bgRotSpeed', value[0]); }}
                         min={0} max={255} step={1}
                     />
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            Rotation speed controls how fast the animation rotates in on itself. 128 is the middle value. Lower and higher will rotate different directions.
+                        </p>
+                    )}
                 </div>
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">
@@ -49,6 +45,12 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         onValueChange={(value) => updateParam('bgLineWidth', value[0])}
                         min={0} max={20} step={1}
                     />
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            Line width controls the width of the palettes as they are drawn. Lower values is wider bands, higher values are thinner bands.
+                        </p>
+                    )}
+
                     {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="flex flex-wrap gap-2">
                             {[2, 4, 8].map((width) => (
@@ -79,6 +81,11 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         max={palettesData.palettes.length - 1}
                         step={1}
                     />
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            The palette controls the colors used in the animation. Different palettes will create different effects.
+                        </p>
+                    )}
                     {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="flex flex-wrap gap-2">
                             {[7, 60].map((bgPaletteIndex) => (
@@ -103,6 +110,12 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                             disabled={!isEnabled}
                         />
                     </div>
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            Palette auto mode will automatically cycle through the palettes. The duration can be adjusted below.
+                        </p>
+                    )}
+
                 </div>
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">
@@ -117,6 +130,11 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                         max={300}
                         step={1}
                     />
+                    {userLevel === USER_LEVELS.BASIC_HELP && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                            Palette auto mode delay controls how long each palette is displayed before crossfading to the next one.
+                        </p>
+                    )}
 
                 </div>
             </CardContent>
