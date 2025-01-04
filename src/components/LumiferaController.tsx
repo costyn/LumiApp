@@ -108,8 +108,8 @@ export function LumiferaController() {
                                 <div className="flex flex-wrap gap-2">
                                     <Button
                                         key="reverse"
-                                        variant={params.direction === 0 ? 'default' : 'outline'}
-                                        onClick={() => updateParam('direction', 0)}
+                                        variant={params.direction === -1 ? 'default' : 'outline'}
+                                        onClick={() => updateParam('direction', -1)}
                                         size="icon"
                                         disabled={!isEnabled}
 

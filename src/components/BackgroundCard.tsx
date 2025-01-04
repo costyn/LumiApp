@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
 import { Button } from './ui/button.tsx'
-import { USER_LEVELS, UserLevel, SharedCardProps } from '@/types/lumifera.ts'
+import { USER_LEVELS, SharedCardProps } from '@/types/lumifera.ts'
 
 export function BackgroundCard({ params, updateParam, isLoading, isEnabled, userLevel }: SharedCardProps) {
     return (

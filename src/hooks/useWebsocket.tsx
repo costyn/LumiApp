@@ -26,7 +26,7 @@ export interface LumiferaParams {
 export type ParamKey = keyof LumiferaParams;
 const DEFAULT_PARAMS: LumiferaParams = {
     bpm: 26,
-    direction: 1,
+    direction: 1, // 1 = forward, -1 = reverse
     fgAnimationEnable: 0,
     fgRotSpeed: 135,
     bgRotSpeed: 28,
