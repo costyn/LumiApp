@@ -40,6 +40,9 @@ export function LumiferaController() {
                     {...sharedProps}
                 />
                 <CardContent className="space-y-4">
+
+                    {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+
                     {/* BPM  */}
                     <div className="space-y-2">
                         <div className="flex justify-left items-center gap-2">
@@ -180,7 +183,8 @@ export function LumiferaController() {
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
                 <BackgroundCard {...sharedProps} />
-                {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard {...sharedProps} />}
+                {/* Feature not yet implemented on Lumifera: */}
+                {/* {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard {...sharedProps} />} */}
                 <SystemPresetsCard {...sharedProps} />
                 <PresetCard {...sharedProps} />
 

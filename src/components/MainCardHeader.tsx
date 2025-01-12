@@ -75,7 +75,7 @@ export function MainCardHeader({
                         </SelectContent>
                     </Select>
                     <ThemeToggle />
-                    {wsStatus === 'disconnected' && <Button onClick={connect} size="default">Reconnect</Button>}
+                    {/* {wsStatus === 'disconnected' && <Button onClick={connect} size="default">Reconnect</Button>} */}
                 </div>
 
                 {/* Mobile Menu */}

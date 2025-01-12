@@ -33,7 +33,9 @@ pnpm dev
 * DONE: Palette hotkeys? 7 dark red and 60 dark purple/blue
 * DONE: Power On/Off button (under preferences)
 * DONE! Add more a "help" user level to add tooltips where each parameter is explained!
+* DONE! Progress bar during blending
 * Countdown timer to the next palette
+* Separate LumiferaController.tsx into multiple components
 
 ### Harder
 * DONE Instant next palette button
