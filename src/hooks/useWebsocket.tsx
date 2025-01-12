@@ -20,12 +20,14 @@ export interface LumiferaParams {
     fixMode: FixMode;
     blendTime: number;
     preset: number;
+    powerState: number;
+    nextPalette: number;
 }
 
 export type ParamKey = keyof LumiferaParams;
 const DEFAULT_PARAMS: LumiferaParams = {
     bpm: 26,
-    direction: 1,
+    direction: 1, // 1 = forward, -1 = reverse
     fgAnimationEnable: 0,
     fgRotSpeed: 135,
     bgRotSpeed: 28,
@@ -41,6 +43,8 @@ const DEFAULT_PARAMS: LumiferaParams = {
     fixMode: 'NONE',
     blendTime: 4000, // default blendtime in milliseconds
     preset: 0,
+    powerState: 1,
+    nextPalette: 0
 }
 
 
@@ -52,6 +56,8 @@ export function useWebSocket(url: string) {
     const [lastChanged, setLastChanged] = useState<ParamKey | null>(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [progress, setProgress] = useState(0)
+
     const timer = useRef<number>();
 
     const connect = () => {
@@ -85,31 +91,60 @@ export function useWebSocket(url: string) {
     };
 
     useEffect(() => {
-        connect();
-        return () => {
+        const reconnectDelay = 1000; // 1 second delay
+
+        const cleanup = () => {
             if (wsRef.current) {
                 wsRef.current.close();
                 wsRef.current = null;
             }
-            if (timer.current) {
-                window.clearTimeout(timer.current);
-            }
+        };
+
+        // Add unload handler
+        window.addEventListener('beforeunload', cleanup);
+
+        // Delayed connect
+        const timeoutId = setTimeout(connect, reconnectDelay);
+
+        return () => {
+            window.removeEventListener('beforeunload', cleanup);
+            clearTimeout(timeoutId);
+            cleanup();
         };
     }, []);
 
-
+    // Update a single param
     const updateParam = (name: ParamKey, value: (number | string)) => {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
         setIsLoading(true);
+        setProgress(0);
+
         // Clear any existing timer
         if (timer.current) {
             window.clearTimeout(timer.current);
         }
+
+        const blendDuration = name === 'blendTime' && typeof value === 'number' ? value : params.blendTime;
+        const startTime = Date.now();
+
+        const progressTimer = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const newProgress = Math.min((elapsed / blendDuration) * 100, 100);
+            setProgress(newProgress);
+
+            if (elapsed >= blendDuration) {
+                clearInterval(progressTimer);
+                setIsLoading(false);
+                setProgress(0);
+            }
+        }, 16); // ~60fps
+
         // Set new timer for blendTime milliseconds
         // Use the new value if we're updating blendTime itself, otherwise uses the existing value.
         timer.current = window.setTimeout(() => {
             setIsLoading(false);
+            setProgress(0);
         }, name === 'blendTime' && typeof value === 'number' ? value : params.blendTime);
     };
 
@@ -120,5 +155,20 @@ export function useWebSocket(url: string) {
         }
     }, [params, ws, lastChanged, isLoading]);
 
-    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading }
+    // Update multiple params at once
+    const updateParams = (newParams: Partial<LumiferaParams>) => {
+        if (ws?.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(newParams));
+            setParams(prev => ({ ...prev, ...newParams }));
+            setIsLoading(true);
+            if (timer.current) {
+                window.clearTimeout(timer.current);
+            }
+            timer.current = window.setTimeout(() => {
+                setIsLoading(false);
+            }, params.blendTime);
+        }
+    };
+
+    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading, progress, updateParams }
 }

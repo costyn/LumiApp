@@ -15,19 +15,14 @@ import { Input } from './ui/input'
 import { useState, useEffect } from 'react'
 import { LumiferaParams } from '@/hooks/useWebsocket'
 import Cookies from 'js-cookie'
+import { SharedCardProps, USER_LEVELS } from '@/types/lumifera'
 
 interface Preset {
     name: string;
     params: Partial<LumiferaParams>;
 }
 
-interface PresetCardProps {
-    params: LumiferaParams;
-    updateParam: (name: keyof LumiferaParams, value: any) => void;
-    isEnabled: boolean
-}
-
-export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) {
+export function PresetCard({ params, isEnabled, updateParams, userLevel }: SharedCardProps) {
     const [presets, setPresets] = useState<Preset[]>([])
     const [newPresetName, setNewPresetName] = useState('')
     const [isCreating, setIsCreating] = useState(false)
@@ -67,7 +62,9 @@ export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) 
                 fgRotSpeed: params.fgRotSpeed,
                 blendTime: params.blendTime,
                 bgPaletteIndex: params.bgPaletteIndex,
-                fgPaletteIndex: params.fgPaletteIndex
+                fgPaletteIndex: params.fgPaletteIndex,
+                autoAdvanceDelay: params.autoAdvanceDelay,
+                autoAdvancePalette: params.autoAdvancePalette,
             }
         }])
         setNewPresetName('')
@@ -75,9 +72,7 @@ export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) 
     }
 
     const loadPreset = (preset: Preset) => {
-        Object.entries(preset.params).forEach(([key, value]) => {
-            updateParam(key as keyof LumiferaParams, value)
-        })
+        updateParams(preset.params as LumiferaParams)
     }
 
     const [presetToDelete, setPresetToDelete] = useState<number | null>(null)
@@ -97,6 +92,11 @@ export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) 
         <Card>
             <CardHeader>
                 <CardTitle>User Presets</CardTitle>
+                {userLevel === USER_LEVELS.BASIC_HELP && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                        User presets allow you to save and load your favorite settings. They are stored in your browser and won't sync between devices.
+                    </p>
+                )}
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -149,15 +149,20 @@ export function PresetCard({ params, updateParam, isEnabled }: PresetCardProps) 
                         </Button>
                     </div>
                 ) : (
-                    <Button
-                        variant="outline"
-                        className="mt-4"
-                        onClick={() => setIsCreating(true)}
-                        disabled={!isEnabled}
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        New Preset
-                    </Button>
+                    <>
+                        <Button
+                            variant="outline"
+                            className="mt-4"
+                            onClick={() => setIsCreating(true)}
+                            disabled={!isEnabled}
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            New Preset
+                        </Button>
+                        <p className="text-xs text-muted-foreground mt-2">
+                            User presets are saved locally and won't sync between devices
+                        </p>
+                    </>
                 )}
             </CardContent>
         </Card>

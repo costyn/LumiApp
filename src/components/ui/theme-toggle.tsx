@@ -21,7 +21,7 @@ export function ThemeToggle() {
     return (
         <Button
             variant="outline"
-            size="sm"
+            size="default"
             onClick={cycleTheme}
             className="min-w-[100px]"
         >

@@ -7,36 +7,37 @@ import { useWebSocket } from '@/hooks/useWebsocket.tsx'
 import { MainCardHeader } from './MainCardHeader.tsx'
 
 import { Button } from './ui/button.tsx';
-import { ChevronLeft, ChevronRight, Pause, Radar, Radio, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { PresetCard } from './PresetCard.tsx'
 import { SystemPresetsCard } from './SystemPresetsCard.tsx'
+import { FIX_MODES, SharedCardProps, USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
+import { BlendProgress } from './BlendProgress.tsx'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
-export type UserLevel = 'basic' | 'advanced';
-const FIX_MODES = [
-    { mode: 'PAUSE', icon: Pause },
-    { mode: 'RADAR', icon: Radar },
-    { mode: 'RADIATE', icon: Radio },
-    { mode: 'NONE', icon: X }
-] as const;
-
 export function LumiferaController() {
+    const { wsStatus, connect, params, updateParam, isLoading, progress, updateParams } = useWebSocket(WS_URL)
+    const [userLevel, setUserLevel] = useState<UserLevel>(USER_LEVELS.BASIC);
+    const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
 
-    const { wsStatus, connect, params, updateParam, isLoading } = useWebSocket(WS_URL)
-    const [userLevel, setUserLevel] = useState<UserLevel>('basic');
-    const isEnabled = wsStatus === 'connected';
+    const sharedProps: SharedCardProps = {
+        params,
+        updateParam,
+        updateParams,
+        isLoading,
+        isEnabled,
+        userLevel,
+        wsStatus
+    }
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto p-4">
             {/* Main Card */}
             <Card>
                 <MainCardHeader
-                    wsStatus={wsStatus}
                     connect={connect}
-                    userLevel={userLevel}
                     setUserLevel={setUserLevel}
-                    isLoading={isLoading}
+                    {...sharedProps}
                 />
                 <CardContent className="space-y-4">
                     {/* BPM  */}
@@ -53,7 +54,7 @@ export function LumiferaController() {
                             step={1}
                             disabled={!isEnabled}
                         />
-                        {userLevel === 'advanced' && (
+                        {userLevel === USER_LEVELS.ADVANCED && (
                             <div className="flex flex-wrap gap-2">
                                 {[10, 30, 60, 120, 130, 140, 260].map((time) => (
                                     <Button
@@ -67,6 +68,11 @@ export function LumiferaController() {
                                     </Button>
                                 ))}
                             </div>)}
+                        {userLevel === USER_LEVELS.BASIC_HELP && (
+                            <p className="text-xs text-muted-foreground mt-2">
+                                BPM controls the speed of the animation. The higher the BPM, the faster the animation.
+                            </p>
+                        )}
                     </div>
 
                     {/* Brightness */}
@@ -84,21 +90,25 @@ export function LumiferaController() {
                             step={1}
                             disabled={!isEnabled}
                         />
+                        {userLevel === USER_LEVELS.BASIC_HELP && (
+                            <p className="text-xs text-muted-foreground mt-2">
+                                Brightness controls the overall brightness of the LEDs. At lower levels the difference is more visible.
+                            </p>
+                        )}
                     </div>
 
                     {/* Direction */}
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
                             <div className="flex justify-left items-center gap-2">
                                 <label className="text-sm font-medium">Direction</label>
                                 <div className="flex flex-wrap gap-2">
                                     <Button
                                         key="reverse"
-                                        variant={params.direction === 0 ? 'default' : 'outline'}
-                                        onClick={() => updateParam('direction', 0)}
+                                        variant={params.direction === -1 ? 'default' : 'outline'}
+                                        onClick={() => updateParam('direction', -1)}
                                         size="icon"
-                                        disabled={!isEnabled}
-
+                                        disabled={!isEnabled || params.fixMode === 'RADAR'} // TODO: Radar direction not yet working on Lumi
                                     >
                                         <ChevronLeft />
                                     </Button>
@@ -119,7 +129,7 @@ export function LumiferaController() {
                         </div>)}
 
                     {/* Fix Mode */}
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
                             <div className="flex justify-left items-center gap-2">
 
@@ -143,9 +153,9 @@ export function LumiferaController() {
                     )}
 
                     {/* Crossfade Time */}
-                    {userLevel === 'advanced' && (
+                    {userLevel === USER_LEVELS.ADVANCED && (
                         <div className="space-y-2">
-                            <div className="flex justify-left items-center gap-2">
+                            <div className="flex flex-wrap justify-left items-center gap-2">
                                 <label className="text-sm font-medium">Crossfade Time</label>
                                 {[200, 500, 1000, 2000, 4000, 8000].map((time) => (
                                     <Button
@@ -161,14 +171,18 @@ export function LumiferaController() {
                         </div>
                     )}
                 </CardContent>
+                <BlendProgress
+                    isBlending={isLoading}
+                    progress={progress}
+                />
             </Card>
 
             {/* Additional Controls */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BackgroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} userLevel={userLevel} />
-                {userLevel === 'advanced' && <ForegroundCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />}
-                <SystemPresetsCard params={params} updateParam={updateParam} isLoading={isLoading} isEnabled={wsStatus === 'connected'} />
-                <PresetCard params={params} updateParam={updateParam} isEnabled={wsStatus === 'connected'} />
+                <BackgroundCard {...sharedProps} />
+                {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard {...sharedProps} />}
+                <SystemPresetsCard {...sharedProps} />
+                <PresetCard {...sharedProps} />
 
             </div>
         </div>
