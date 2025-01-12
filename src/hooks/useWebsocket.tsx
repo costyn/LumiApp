@@ -56,6 +56,8 @@ export function useWebSocket(url: string) {
     const [lastChanged, setLastChanged] = useState<ParamKey | null>(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [progress, setProgress] = useState(0)
+
     const timer = useRef<number>();
 
     const connect = () => {
@@ -116,14 +118,33 @@ export function useWebSocket(url: string) {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
         setIsLoading(true);
+        setProgress(0);
+
         // Clear any existing timer
         if (timer.current) {
             window.clearTimeout(timer.current);
         }
+
+        const blendDuration = name === 'blendTime' && typeof value === 'number' ? value : params.blendTime;
+        const startTime = Date.now();
+
+        const progressTimer = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const newProgress = Math.min((elapsed / blendDuration) * 100, 100);
+            setProgress(newProgress);
+
+            if (elapsed >= blendDuration) {
+                clearInterval(progressTimer);
+                setIsLoading(false);
+                setProgress(0);
+            }
+        }, 16); // ~60fps
+
         // Set new timer for blendTime milliseconds
         // Use the new value if we're updating blendTime itself, otherwise uses the existing value.
         timer.current = window.setTimeout(() => {
             setIsLoading(false);
+            setProgress(0);
         }, name === 'blendTime' && typeof value === 'number' ? value : params.blendTime);
     };
 
@@ -149,5 +170,5 @@ export function useWebSocket(url: string) {
         }
     };
 
-    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading, updateParams }
+    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading, progress, updateParams }
 }

@@ -11,11 +11,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { PresetCard } from './PresetCard.tsx'
 import { SystemPresetsCard } from './SystemPresetsCard.tsx'
 import { FIX_MODES, SharedCardProps, USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
+import { BlendProgress } from './BlendProgress.tsx'
 
 const WS_URL = 'ws://lumifera.local/ws'
 
 export function LumiferaController() {
-    const { wsStatus, connect, params, updateParam, isLoading, updateParams } = useWebSocket(WS_URL)
+    const { wsStatus, connect, params, updateParam, isLoading, progress, updateParams } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>(USER_LEVELS.BASIC);
     const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
 
@@ -170,6 +171,10 @@ export function LumiferaController() {
                         </div>
                     )}
                 </CardContent>
+                <BlendProgress
+                    isBlending={isLoading}
+                    progress={progress}
+                />
             </Card>
 
             {/* Additional Controls */}

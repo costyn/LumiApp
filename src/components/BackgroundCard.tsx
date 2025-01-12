@@ -1,4 +1,4 @@
-import { Forward, Loader, StepForward } from 'lucide-react'
+import { Loader, StepForward } from 'lucide-react'
 import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'

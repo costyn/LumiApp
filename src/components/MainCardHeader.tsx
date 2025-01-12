@@ -3,7 +3,7 @@ import { Button } from './ui/button.tsx'
 import { CardHeader, CardTitle, CardDescription } from './ui/card.tsx'
 import { ThemeToggle } from './ui/theme-toggle.tsx'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from './ui/select.tsx'
-import { Loader, Menu, Power } from "lucide-react"
+import { Loader, Menu } from "lucide-react"
 import {
     Dialog,
     DialogContent,
