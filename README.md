@@ -37,12 +37,14 @@ pnpm dev
 * Countdown timer to the next palette
 * Separate LumiferaController.tsx into multiple components
 
+
 ### Harder
 * DONE Instant next palette button
 * Fix Blend time input lockout (important!)
 * DONE Lumi code send palettes on task initiated crossfades
 * Palette dropdown/selector?
 * Use Palette themes/tags like the remote.html
+* Share button to share current settings
 
 ### Hardest
 * Palettegroups per preset

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Card, CardContent } from './ui/card.tsx'
 import { Slider } from './ui/slider.tsx'
 import { BackgroundCard } from './BackgroundCard'
-import { ForegroundCard } from './ForegroundCard'
+// import { ForegroundCard } from './ForegroundCard'
 import { useWebSocket } from '@/hooks/useWebsocket.tsx'
 import { MainCardHeader } from './MainCardHeader.tsx'
 
