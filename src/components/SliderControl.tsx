@@ -9,7 +9,7 @@ interface SliderControlProps {
     max: number
     step: number
     disabled: boolean
-    userLevel: UserLevel
+    userLevel?: UserLevel
     onValueChange: (value: number) => void
     presetValues?: number[]
     helpText?: string

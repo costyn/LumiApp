@@ -14,3 +14,8 @@ All notable changes to this project will be documented in this file.
   - Reduced LumiferaController from 194 lines to ~110 lines
   - Improved maintainability and reusability of control components
   - Maintained all original functionality while improving code organization
+- **Refactored BackgroundCard**: Replaced individual slider implementations with reusable SliderControl component
+  - Replaced Rotation Speed, Line Width, Palette Index, and Palette Auto Mode Delay sliders
+  - Further consolidated slider patterns across the application
+  - Made SliderControl component more flexible with optional userLevel prop
+  - Reduced code duplication and improved consistency

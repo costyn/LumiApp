@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 export type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
@@ -72,7 +72,7 @@ export function useWebSocket(url: string) {
         }
     }
 
-    const connect = () => {
+    const connect = useCallback(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
             return;
         }
@@ -100,7 +100,7 @@ export function useWebSocket(url: string) {
                 console.error('Error parsing WebSocket message:', error);
             }
         };
-    };
+    }, [url]);
 
     useEffect(() => {
         const reconnectDelay = 1000; // 1 second delay
@@ -123,7 +123,7 @@ export function useWebSocket(url: string) {
             clearTimeout(timeoutId);
             cleanup();
         };
-    }, []);
+    }, [connect]);
 
     // Update a single param
     const updateParam = (name: ParamKey, value: (number | string)) => {

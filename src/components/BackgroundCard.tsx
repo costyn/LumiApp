@@ -1,10 +1,10 @@
 import { Loader, StepForward } from 'lucide-react'
 import { palettesData } from './PaletteSelector.tsx'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card.tsx'
-import { Slider } from './ui/slider.tsx'
 import { Switch } from './ui/switch.tsx'
 import { Button } from './ui/button.tsx'
 import { USER_LEVELS, SharedCardProps } from '@/types/lumifera.ts'
+import { SliderControl } from './SliderControl'
 
 export function BackgroundCard({ params, updateParam, isLoading, isEnabled, userLevel }: SharedCardProps) {
     return (
@@ -16,56 +16,29 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <div className="flex justify-left items-center gap-2">
-                        <label className="text-sm font-medium">Rotation Speed</label>
-                        <span className="text-sm text-muted-foreground">{params.bgRotSpeed}</span>
-                    </div>
-                    <Slider
-                        value={[params.bgRotSpeed]}
-                        disabled={!isEnabled}
-                        onValueChange={(value) => { updateParam('bgRotSpeed', value[0]); }}
-                        min={0} max={255} step={1}
-                    />
-                    {userLevel === USER_LEVELS.BASIC_HELP && (
-                        <p className="text-xs text-muted-foreground mt-2">
-                            Rotation speed controls how fast the animation rotates in on itself. 128 is the middle value. Lower and higher will rotate different directions.
-                        </p>
-                    )}
-                </div>
-                <div className="space-y-2">
-                    <div className="flex justify-left items-center gap-2">
-                        <label className="text-sm font-medium">Line Width</label>
-                        <span className="text-sm text-muted-foreground">{params.bgLineWidth}</span>
-                    </div>
-
-                    <Slider
-                        value={[params.bgLineWidth]}
-                        disabled={!isEnabled}
-                        onValueChange={(value) => updateParam('bgLineWidth', value[0])}
-                        min={0} max={20} step={1}
-                    />
-                    {userLevel === USER_LEVELS.BASIC_HELP && (
-                        <p className="text-xs text-muted-foreground mt-2">
-                            Line width controls the width of the palettes as they are drawn. Lower values is wider bands, higher values are thinner bands.
-                        </p>
-                    )}
-
-                    {userLevel === USER_LEVELS.ADVANCED && (
-                        <div className="flex flex-wrap gap-2">
-                            {[2, 4, 8].map((width) => (
-                                <Button
-                                    key={width}
-                                    variant={params.bgLineWidth === width ? 'default' : 'outline'}
-                                    size={'sm'}
-                                    onClick={() => updateParam('bgLineWidth', width)}
-                                    disabled={!isEnabled}
-                                >
-                                    {width}
-                                </Button>
-                            ))}
-                        </div>)}
-                </div>
+                <SliderControl
+                    label="Rotation Speed"
+                    value={params.bgRotSpeed}
+                    min={0}
+                    max={255}
+                    step={1}
+                    disabled={!isEnabled}
+                    userLevel={userLevel}
+                    onValueChange={(value) => updateParam('bgRotSpeed', value)}
+                    helpText="Rotation speed controls how fast the animation rotates in on itself. 128 is the middle value. Lower and higher will rotate different directions."
+                />
+                <SliderControl
+                    label="Line Width"
+                    value={params.bgLineWidth}
+                    min={0}
+                    max={20}
+                    step={1}
+                    disabled={!isEnabled}
+                    userLevel={userLevel}
+                    onValueChange={(value) => updateParam('bgLineWidth', value)}
+                    presetValues={[2, 4, 8]}
+                    helpText="Line width controls the width of the palettes as they are drawn. Lower values is wider bands, higher values are thinner bands."
+                />
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">
                         <label className="text-sm font-medium">Palette</label>
@@ -73,33 +46,18 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                             {palettesData.palettes[params.bgPaletteIndex]?.label ?? 'Unknown'}
                         </span>
                     </div>
-                    <Slider
-                        value={[params.bgPaletteIndex]}
-                        disabled={!isEnabled}
-                        onValueChange={([value]) => updateParam('bgPaletteIndex', value)}
+                    <SliderControl
+                        label=""
+                        value={params.bgPaletteIndex}
                         min={0}
                         max={palettesData.palettes.length - 1}
                         step={1}
+                        disabled={!isEnabled}
+                        userLevel={userLevel}
+                        onValueChange={(value) => updateParam('bgPaletteIndex', value)}
+                        presetValues={[7, 60]}
+                        helpText="The palette controls the colors used in the animation. Different palettes will create different effects."
                     />
-                    {userLevel === USER_LEVELS.BASIC_HELP && (
-                        <p className="text-xs text-muted-foreground mt-2">
-                            The palette controls the colors used in the animation. Different palettes will create different effects.
-                        </p>
-                    )}
-                    {userLevel === USER_LEVELS.ADVANCED && (
-                        <div className="flex flex-wrap gap-2">
-                            {[7, 60].map((bgPaletteIndex) => (
-                                <Button
-                                    key={bgPaletteIndex}
-                                    variant={params.bgPaletteIndex === bgPaletteIndex ? 'default' : 'outline'}
-                                    size={'sm'}
-                                    onClick={() => updateParam('bgPaletteIndex', bgPaletteIndex)}
-                                    disabled={!isEnabled}
-                                >
-                                    {bgPaletteIndex}
-                                </Button>
-                            ))}
-                        </div>)}
                 </div>
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">
@@ -117,26 +75,18 @@ export function BackgroundCard({ params, updateParam, isLoading, isEnabled, user
                     )}
 
                 </div>
-                <div className="space-y-2">
-                    <div className="flex justify-left items-center gap-2">
-                        <label className="text-sm font-medium">Palette Auto Mode Delay</label>
-                        <span className="text-sm text-muted-foreground">{params.autoAdvanceDelay} sec</span>
-                    </div>
-                    <Slider
-                        value={[params.autoAdvanceDelay]}
-                        disabled={!isEnabled || params.autoAdvancePalette === 0}
-                        onValueChange={([value]) => updateParam('autoAdvanceDelay', value)}
-                        min={0}
-                        max={300}
-                        step={1}
-                    />
-                    {userLevel === USER_LEVELS.BASIC_HELP && (
-                        <p className="text-xs text-muted-foreground mt-2">
-                            Palette auto mode delay controls how long each palette is displayed before crossfading to the next one.
-                        </p>
-                    )}
-
-                </div>
+                <SliderControl
+                    label="Palette Auto Mode Delay"
+                    value={params.autoAdvanceDelay}
+                    min={0}
+                    max={300}
+                    step={1}
+                    disabled={!isEnabled || params.autoAdvancePalette === 0}
+                    userLevel={userLevel}
+                    onValueChange={(value) => updateParam('autoAdvanceDelay', value)}
+                    suffix=" sec"
+                    helpText="Palette auto mode delay controls how long each palette is displayed before crossfading to the next one."
+                />
                 <div className="space-y-2">
                     <div className="flex justify-left items-center gap-2">
 
