@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 export type FixMode = 'PAUSE' | 'RADAR' | 'RADIATE' | 'NONE';
 
@@ -53,14 +53,26 @@ export function useWebSocket(url: string) {
     const [ws, setWs] = useState<WebSocket | null>(null)
     const [params, setParams] = useState<LumiferaParams>(DEFAULT_PARAMS)
     const wsRef = useRef<WebSocket | null>(null);
-    const [lastChanged, setLastChanged] = useState<ParamKey | null>(null);
+    const [lastChanged, setLastChanged] = useState<ParamKey | null>(null)
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const [progress, setProgress] = useState(0)
 
-    const timer = useRef<number>();
+    const transitionTimerRef = useRef<NodeJS.Timeout | null>(null)
+    const progressIntervalRef = useRef<number | null>(null)
 
-    const connect = () => {
+    const clearTimers = () => {
+        if (progressIntervalRef.current !== null) {
+            clearInterval(progressIntervalRef.current)
+            progressIntervalRef.current = null
+        }
+        if (transitionTimerRef.current) {
+            clearTimeout(transitionTimerRef.current)
+            transitionTimerRef.current = null
+        }
+    }
+
+    const connect = useCallback(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
             return;
         }
@@ -83,12 +95,13 @@ export function useWebSocket(url: string) {
         websocket.onmessage = (event) => {
             try {
                 const receivedParams = JSON.parse(event.data);
-                setParams(prev => ({ ...prev, ...receivedParams }));
+                console.log('Received WebSocket message:', receivedParams);
+                receivedParams && setParams(prev => ({ ...prev, ...receivedParams }));
             } catch (error) {
                 console.error('Error parsing WebSocket message:', error);
             }
         };
-    };
+    }, [url]);
 
     useEffect(() => {
         const reconnectDelay = 1000; // 1 second delay
@@ -111,49 +124,59 @@ export function useWebSocket(url: string) {
             clearTimeout(timeoutId);
             cleanup();
         };
-    }, []);
+    }, [connect]);
 
     // Update a single param
     const updateParam = (name: ParamKey, value: (number | string)) => {
         setParams(prev => ({ ...prev, [name]: value }));
         setLastChanged(name);
+        clearTimers() // Clear existing timers
+
         setIsLoading(true);
         setProgress(0);
-
-        // Clear any existing timer
-        if (timer.current) {
-            window.clearTimeout(timer.current);
-        }
 
         const blendDuration = name === 'blendTime' && typeof value === 'number' ? value : params.blendTime;
         const startTime = Date.now();
 
-        const progressTimer = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const newProgress = Math.min((elapsed / blendDuration) * 100, 100);
-            setProgress(newProgress);
+        progressIntervalRef.current = window.setInterval(() => {
+            const elapsed = Date.now() - startTime
+            const newProgress = Math.min((elapsed / blendDuration) * 100, 100)
+            setProgress(newProgress)
 
             if (elapsed >= blendDuration) {
-                clearInterval(progressTimer);
-                setIsLoading(false);
-                setProgress(0);
+                clearTimers()
+                setIsLoading(false)
+                setProgress(0)
             }
-        }, 16); // ~60fps
+        }, 16)
 
-        // Set new timer for blendTime milliseconds
-        // Use the new value if we're updating blendTime itself, otherwise uses the existing value.
-        timer.current = window.setTimeout(() => {
-            setIsLoading(false);
-            setProgress(0);
-        }, name === 'blendTime' && typeof value === 'number' ? value : params.blendTime);
+        transitionTimerRef.current = setTimeout(() => {
+            clearTimers()
+            setIsLoading(false)
+            setProgress(0)
+        }, blendDuration)
     };
 
     useEffect(() => {
+        return () => clearTimers() // Cleanup on unmount
+    }, [])
+
+    useEffect(() => {
+        // console.log('WebSocket send effect triggered:', {
+        //     wsReadyState: ws?.readyState,
+        //     wsOpen: ws?.readyState === WebSocket.OPEN,
+        //     lastChanged,
+        //     paramValue: lastChanged ? params[lastChanged] : null,
+        //     isLoading
+        // });
+
         if (ws?.readyState === WebSocket.OPEN && lastChanged) {
-            ws.send(JSON.stringify({ [lastChanged]: params[lastChanged] }));
+            const payload = { [lastChanged]: params[lastChanged] };
+            console.log('Sending WebSocket message:', payload);
+            ws.send(JSON.stringify(payload));
             setLastChanged(null);
         }
-    }, [params, ws, lastChanged, isLoading]);
+    }, [params, ws, lastChanged]);
 
     // Update multiple params at once
     const updateParams = (newParams: Partial<LumiferaParams>) => {
@@ -161,10 +184,9 @@ export function useWebSocket(url: string) {
             ws.send(JSON.stringify(newParams));
             setParams(prev => ({ ...prev, ...newParams }));
             setIsLoading(true);
-            if (timer.current) {
-                window.clearTimeout(timer.current);
-            }
-            timer.current = window.setTimeout(() => {
+            clearTimers();
+
+            transitionTimerRef.current = setTimeout(() => {
                 setIsLoading(false);
             }, params.blendTime);
         }
