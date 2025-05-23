@@ -1,0 +1,66 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="petalGradient" cx="0.3" cy="0.3" r="0.8">
+      <stop offset="0%" style="stop-color:#e8d5ff;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#a855f7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#3730a3;stop-opacity:0.8" />
+    </radialGradient>
+    <radialGradient id="centerGradient" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066ff;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g transform="translate(60,60)" filter="url(#glow)">
+    <!-- 13 petals arranged in spiral -->
+    <g transform="rotate(0)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(27.69)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(55.38)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(83.07)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(110.76)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(138.45)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(166.14)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(193.83)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(221.52)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(249.21)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(276.9)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(304.59)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    <g transform="rotate(332.28)">
+      <path d="M 0,0 Q 15,-5 25,-15 Q 30,-25 25,-35 Q 15,-40 5,-35 Q -5,-25 0,-15 Z" fill="url(#petalGradient)" opacity="0.9"/>
+    </g>
+    
+    <!-- Center circle -->
+    <circle cx="0" cy="0" r="8" fill="url(#centerGradient)"/>
+  </g>
+</svg>
