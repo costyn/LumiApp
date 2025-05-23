@@ -95,7 +95,8 @@ export function useWebSocket(url: string) {
         websocket.onmessage = (event) => {
             try {
                 const receivedParams = JSON.parse(event.data);
-                setParams(prev => ({ ...prev, ...receivedParams }));
+                console.log('Received WebSocket message:', receivedParams);
+                receivedParams && setParams(prev => ({ ...prev, ...receivedParams }));
             } catch (error) {
                 console.error('Error parsing WebSocket message:', error);
             }
@@ -161,11 +162,21 @@ export function useWebSocket(url: string) {
     }, [])
 
     useEffect(() => {
+        // console.log('WebSocket send effect triggered:', {
+        //     wsReadyState: ws?.readyState,
+        //     wsOpen: ws?.readyState === WebSocket.OPEN,
+        //     lastChanged,
+        //     paramValue: lastChanged ? params[lastChanged] : null,
+        //     isLoading
+        // });
+
         if (ws?.readyState === WebSocket.OPEN && lastChanged) {
-            ws.send(JSON.stringify({ [lastChanged]: params[lastChanged] }));
+            const payload = { [lastChanged]: params[lastChanged] };
+            console.log('Sending WebSocket message:', payload);
+            ws.send(JSON.stringify(payload));
             setLastChanged(null);
         }
-    }, [params, ws, lastChanged, isLoading]);
+    }, [params, ws, lastChanged]);
 
     // Update multiple params at once
     const updateParams = (newParams: Partial<LumiferaParams>) => {
