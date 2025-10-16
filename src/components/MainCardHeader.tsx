@@ -15,14 +15,17 @@ import {
 import { SharedCardProps, UserLevel } from '@/types/lumifera.ts'
 import { USER_LEVELS } from '@/types/lumifera.ts'
 import { PowerButton } from './PowerButton.tsx'
+import { ConnectionState } from '@/hooks/useWebsocket'
 
 interface MainCardHeaderProps extends SharedCardProps {
-    connect: () => void;
+    manualReconnect: () => void;
+    connectionState: ConnectionState;
     setUserLevel: (level: UserLevel) => void;
 }
 
 export function MainCardHeader({
-    connect,
+    manualReconnect,
+    connectionState,
     setUserLevel,
     params,
     wsStatus,
@@ -75,7 +78,10 @@ export function MainCardHeader({
                         </SelectContent>
                     </Select>
                     <ThemeToggle />
-                    {/* {wsStatus === 'disconnected' && <Button onClick={connect} size="default">Reconnect</Button>} */}
+                    {/* Only show reconnect button after all automatic retries have failed */}
+                    {!connectionState.isConnected && !connectionState.isConnecting &&
+                        connectionState.reconnectAttempts >= 3 &&
+                        <Button onClick={manualReconnect} size="default">Reconnect</Button>}
                 </div>
 
                 {/* Mobile Menu */}
@@ -111,7 +117,10 @@ export function MainCardHeader({
                                 </Select>
                                 <ThemeToggle />
                             </div>
-                            {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                            {/* Only show reconnect button after all automatic retries have failed */}
+                            {!connectionState.isConnected && !connectionState.isConnecting &&
+                                connectionState.reconnectAttempts >= 3 &&
+                                <Button onClick={manualReconnect}>Reconnect</Button>}
                         </div>
                     </DialogContent>
                 </Dialog>

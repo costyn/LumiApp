@@ -25,6 +25,14 @@ export interface LumiferaParams {
 }
 
 export type ParamKey = keyof LumiferaParams;
+
+export interface ConnectionState {
+    isConnected: boolean;
+    isConnecting: boolean;
+    reconnectAttempts: number;
+    lastError?: string;
+}
+
 const DEFAULT_PARAMS: LumiferaParams = {
     bpm: 26,
     direction: 1, // 1 = forward, -1 = reverse
@@ -49,10 +57,18 @@ const DEFAULT_PARAMS: LumiferaParams = {
 
 
 export function useWebSocket(url: string) {
-    const [wsStatus, setWsStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected')
+    const [connectionState, setConnectionState] = useState<ConnectionState>({
+        isConnected: false,
+        isConnecting: false,
+        reconnectAttempts: 0,
+        lastError: undefined
+    })
     const [ws, setWs] = useState<WebSocket | null>(null)
     const [params, setParams] = useState<LumiferaParams>(DEFAULT_PARAMS)
     const wsRef = useRef<WebSocket | null>(null);
+    const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const maxReconnectAttempts = 3;
+    const reconnectDelay = 2000;
     const [lastChanged, setLastChanged] = useState<ParamKey | null>(null)
 
     const [isLoading, setIsLoading] = useState(false)
@@ -72,24 +88,72 @@ export function useWebSocket(url: string) {
         }
     }
 
+    const cleanup = useCallback(() => {
+        if (reconnectTimeoutRef.current) {
+            clearTimeout(reconnectTimeoutRef.current)
+            reconnectTimeoutRef.current = null
+        }
+
+        if (wsRef.current) {
+            wsRef.current.close()
+            wsRef.current = null
+        }
+    }, [])
+
     const connect = useCallback(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
             return;
         }
 
+        console.log('Connecting to WebSocket:', url);
         const websocket = new WebSocket(url);
         wsRef.current = websocket;
-        setWsStatus('connecting');
+
+        setConnectionState(prev => ({
+            ...prev,
+            isConnecting: true,
+            lastError: undefined
+        }));
 
         websocket.onopen = () => {
-            setWsStatus('connected');
+            console.log('WebSocket connected');
+            setConnectionState({
+                isConnected: true,
+                isConnecting: false,
+                reconnectAttempts: 0,
+                lastError: undefined
+            });
             setWs(websocket);
         };
 
-        websocket.onclose = () => {
-            setWsStatus('disconnected');
+        websocket.onclose = (event) => {
+            console.log('WebSocket disconnected:', event.code, event.reason);
+            setConnectionState(prev => ({
+                ...prev,
+                isConnected: false,
+                isConnecting: false
+            }));
             setWs(null);
             wsRef.current = null;
+
+            // Attempt reconnection if under max attempts
+            if (connectionState.reconnectAttempts < maxReconnectAttempts) {
+                reconnectTimeoutRef.current = setTimeout(() => {
+                    setConnectionState(prev => ({
+                        ...prev,
+                        reconnectAttempts: prev.reconnectAttempts + 1
+                    }));
+                    connect();
+                }, reconnectDelay);
+            }
+        };
+
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            setConnectionState(prev => ({
+                ...prev,
+                lastError: 'Connection failed'
+            }));
         };
 
         websocket.onmessage = (event) => {
@@ -101,30 +165,52 @@ export function useWebSocket(url: string) {
                 console.error('Error parsing WebSocket message:', error);
             }
         };
-    }, [url]);
+    }, [url, connectionState.reconnectAttempts, maxReconnectAttempts, reconnectDelay]);
 
+    const manualReconnect = useCallback(() => {
+        cleanup();
+        setConnectionState({
+            isConnected: false,
+            isConnecting: false,
+            reconnectAttempts: 0,
+            lastError: undefined
+        });
+        connect();
+    }, [cleanup, connect]);
+
+    // Initialize connection
     useEffect(() => {
-        const reconnectDelay = 1000; // 1 second delay
+        connect();
 
-        const cleanup = () => {
-            if (wsRef.current) {
-                wsRef.current.close();
-                wsRef.current = null;
+        const handleBeforeUnload = () => {
+            cleanup();
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            cleanup();
+        };
+    }, [connect, cleanup]);
+
+    // Page visibility detection - reconnect when page becomes visible
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible' &&
+                !connectionState.isConnected &&
+                !connectionState.isConnecting) {
+                console.log('Page became visible, attempting to reconnect...');
+                manualReconnect();
             }
         };
 
-        // Add unload handler
-        window.addEventListener('beforeunload', cleanup);
-
-        // Delayed connect
-        const timeoutId = setTimeout(connect, reconnectDelay);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
-            window.removeEventListener('beforeunload', cleanup);
-            clearTimeout(timeoutId);
-            cleanup();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [connect]);
+    }, [connectionState.isConnected, connectionState.isConnecting, manualReconnect]);
 
     // Update a single param
     const updateParam = (name: ParamKey, value: (number | string)) => {
@@ -192,5 +278,23 @@ export function useWebSocket(url: string) {
         }
     };
 
-    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading, progress, updateParams }
+    // Computed wsStatus for backward compatibility
+    const wsStatus: 'connecting' | 'connected' | 'disconnected' =
+        connectionState.isConnecting ? 'connecting' :
+            connectionState.isConnected ? 'connected' : 'disconnected';
+
+    return {
+        ws,
+        wsStatus,
+        connectionState,
+        connect,
+        manualReconnect,
+        params,
+        updateParam,
+        lastChanged,
+        setLastChanged,
+        isLoading,
+        progress,
+        updateParams
+    }
 }
