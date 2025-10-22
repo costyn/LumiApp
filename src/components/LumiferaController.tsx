@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent } from './ui/card'
 import { BackgroundCard } from './BackgroundCard'
 // import { ForegroundCard } from './ForegroundCard'
@@ -14,14 +14,28 @@ import { DirectionControl } from './DirectionControl'
 import { FixModeControl } from './FixModeControl'
 import { CrossfadeTimeControl } from './CrossfadeTimeControl'
 import DebugConsole from './DebugConsole/DebugConsole'
+import Cookies from 'js-cookie'
 
 const CONTOLLER_HOSTNAME = 'lumifera.local'
 const WS_URL = `ws://${CONTOLLER_HOSTNAME}/ws`
 export const WS_DEBUG_URL = `ws://${CONTOLLER_HOSTNAME}/debug`
 
+const USER_LEVEL_COOKIE_KEY = 'lumifera-user-level'
+
 export function LumiferaController() {
     const { wsStatus, connectionState, manualReconnect, params, updateParam, isLoading, progress, updateParams } = useWebSocket(WS_URL)
-    const [userLevel, setUserLevel] = useState<UserLevel>(USER_LEVELS.BASIC);
+
+    // Load user level from cookie on mount, default to BASIC if not found
+    const [userLevel, setUserLevel] = useState<UserLevel>(() => {
+        const savedLevel = Cookies.get(USER_LEVEL_COOKIE_KEY)
+        return (savedLevel as UserLevel) || USER_LEVELS.BASIC
+    });
+
+    // Save user level to cookie whenever it changes
+    useEffect(() => {
+        Cookies.set(USER_LEVEL_COOKIE_KEY, userLevel, { expires: 365 })
+    }, [userLevel]);
+
     const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
 
     const sharedProps: SharedCardProps = {

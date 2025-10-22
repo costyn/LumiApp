@@ -34,12 +34,13 @@ pnpm dev
 * DONE: Power On/Off button (under preferences)
 * DONE! Add more a "help" user level to add tooltips where each parameter is explained!
 * DONE! Progress bar during blending
+* DONE! Warnings for low light/low bpm modes
+* DONE! Save a cookie for the USER LEVEL and Dark Mode preference
 * Countdown timer to the next palette
 * Sort of done? Separate LumiferaController.tsx into multiple components
-* Save a cookie for the USER LEVEL and Dark Mode preference
 * Move System presets and user presets onto the same card
 * Smaller margin on the phone layout
-* Warnings for low light/low bpm modes
+
 
 
 ### Harder
