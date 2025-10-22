@@ -36,16 +36,15 @@ pnpm dev
 * DONE! Progress bar during blending
 * DONE! Warnings for low light/low bpm modes
 * DONE! Save a cookie for the USER LEVEL and Dark Mode preference
-* Countdown timer to the next palette
+* DONE! Move System presets and user presets onto the same card
+* DONE! Smaller margin on the phone layout
 * Sort of done? Separate LumiferaController.tsx into multiple components
-* Move System presets and user presets onto the same card
-* Smaller margin on the phone layout
-
 
 
 ### Harder
 * DONE Instant next palette button
 * Fix Blend time input lockout (important!)
+* Countdown timer to the next palette
 * DONE Lumi code send palettes on task initiated crossfades
 * Palette dropdown/selector?
 * Use Palette themes/tags like the remote.html
