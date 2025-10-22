@@ -139,10 +139,12 @@ export function LumiferaController() {
                 <BackgroundCard {...sharedProps} />
                 {/* Feature not yet implemented on Lumifera: */}
                 {/* {userLevel === USER_LEVELS.ADVANCED && <ForegroundCard {...sharedProps} />} */}
-                <SystemPresetsCard {...sharedProps} />
-                <PresetCard {...sharedProps} />
-
+                <div className="space-y-4">
+                    <SystemPresetsCard {...sharedProps} />
+                    <PresetCard {...sharedProps} />
+                </div>
             </div>
+
             {userLevel === USER_LEVELS.ADVANCED && (
                 <DebugConsole />
             )}
