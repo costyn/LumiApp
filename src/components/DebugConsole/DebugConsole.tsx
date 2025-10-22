@@ -13,8 +13,16 @@ const DebugConsole: React.FC = () => {
   const wsRef = useRef<WebSocket | null>(null);
 
   const connectWebSocket = () => {
+    // Check if already connected or connecting
+    if (wsRef.current && (wsRef.current.readyState === WebSocket.OPEN || wsRef.current.readyState === WebSocket.CONNECTING)) {
+      console.log('Debug WebSocket already connected or connecting, skipping');
+      return;
+    }
+
+    // Cleanup any existing connection before creating a new one
     if (wsRef.current) {
-      return; // Already connected or connecting
+      wsRef.current.close();
+      wsRef.current = null;
     }
 
     setConnectionStatus('connecting');

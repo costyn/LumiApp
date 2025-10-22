@@ -89,20 +89,32 @@ export function useWebSocket(url: string) {
     }
 
     const cleanup = useCallback(() => {
+        console.log('Cleanup called');
         if (reconnectTimeoutRef.current) {
             clearTimeout(reconnectTimeoutRef.current)
             reconnectTimeoutRef.current = null
         }
 
         if (wsRef.current) {
+            console.log('Closing existing WebSocket');
             wsRef.current.close()
             wsRef.current = null
         }
     }, [])
 
     const connect = useCallback(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
-            return;
+        // Guard against duplicate connections (e.g., React StrictMode double-invocation)
+        if (wsRef.current) {
+            const state = wsRef.current.readyState;
+            if (state === WebSocket.OPEN || state === WebSocket.CONNECTING) {
+                console.log('WebSocket already connected or connecting, skipping');
+                return;
+            }
+            // If there's a CLOSING or CLOSED socket, clean it up first
+            if (state === WebSocket.CLOSING || state === WebSocket.CLOSED) {
+                console.log('Cleaning up old WebSocket before creating new one');
+                wsRef.current = null;
+            }
         }
 
         console.log('Connecting to WebSocket:', url);
@@ -128,24 +140,28 @@ export function useWebSocket(url: string) {
 
         websocket.onclose = (event) => {
             console.log('WebSocket disconnected:', event.code, event.reason);
-            setConnectionState(prev => ({
-                ...prev,
-                isConnected: false,
-                isConnecting: false
-            }));
+            setConnectionState(prev => {
+                const newState = {
+                    ...prev,
+                    isConnected: false,
+                    isConnecting: false
+                };
+
+                // Attempt reconnection if under max attempts
+                if (prev.reconnectAttempts < maxReconnectAttempts) {
+                    reconnectTimeoutRef.current = setTimeout(() => {
+                        setConnectionState(prevState => ({
+                            ...prevState,
+                            reconnectAttempts: prevState.reconnectAttempts + 1
+                        }));
+                        connect();
+                    }, reconnectDelay);
+                }
+
+                return newState;
+            });
             setWs(null);
             wsRef.current = null;
-
-            // Attempt reconnection if under max attempts
-            if (connectionState.reconnectAttempts < maxReconnectAttempts) {
-                reconnectTimeoutRef.current = setTimeout(() => {
-                    setConnectionState(prev => ({
-                        ...prev,
-                        reconnectAttempts: prev.reconnectAttempts + 1
-                    }));
-                    connect();
-                }, reconnectDelay);
-            }
         };
 
         websocket.onerror = (error) => {
@@ -165,7 +181,7 @@ export function useWebSocket(url: string) {
                 console.error('Error parsing WebSocket message:', error);
             }
         };
-    }, [url, connectionState.reconnectAttempts, maxReconnectAttempts, reconnectDelay]);
+    }, [url]);
 
     const manualReconnect = useCallback(() => {
         cleanup();
@@ -180,6 +196,7 @@ export function useWebSocket(url: string) {
 
     // Initialize connection
     useEffect(() => {
+        console.log('useEffect: initializing connection');
         connect();
 
         const handleBeforeUnload = () => {
@@ -189,6 +206,7 @@ export function useWebSocket(url: string) {
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
+            console.log('useEffect: cleanup on unmount');
             window.removeEventListener('beforeunload', handleBeforeUnload);
             cleanup();
         };

@@ -122,7 +122,9 @@ export function LumiferaController() {
                 <PresetCard {...sharedProps} />
 
             </div>
-            <DebugConsole />
+            {userLevel === USER_LEVELS.ADVANCED && (
+                <DebugConsole />
+            )}
         </div>
     );
 }

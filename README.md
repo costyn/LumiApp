@@ -35,7 +35,11 @@ pnpm dev
 * DONE! Add more a "help" user level to add tooltips where each parameter is explained!
 * DONE! Progress bar during blending
 * Countdown timer to the next palette
-* Separate LumiferaController.tsx into multiple components
+* Sort of done? Separate LumiferaController.tsx into multiple components
+* Save a cookie for the USER LEVEL and Dark Mode preference
+* Move System presets and user presets onto the same card
+* Smaller margin on the phone layout
+* Warnings for low light/low bpm modes
 
 
 ### Harder
@@ -50,4 +54,6 @@ pnpm dev
 * Palettegroups per preset
 * DONE: User presets in app?
 * Taptempo??
+* User Presets are saved to NVRAM on the ESP
+* Add new palettes through the webapp
 
