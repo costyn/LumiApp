@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(pnpm lint:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Read(//Users/costyn/Developer/platformio/lilygo-motion-controller/webapp/src/hooks/**)"
     ],
     "deny": []
   }

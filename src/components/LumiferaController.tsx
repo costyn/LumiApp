@@ -1,23 +1,26 @@
 import { useState } from 'react'
-import { Card, CardContent } from './ui/card.tsx'
+import { Card, CardContent } from './ui/card'
 import { BackgroundCard } from './BackgroundCard'
 // import { ForegroundCard } from './ForegroundCard'
-import { useWebSocket } from '@/hooks/useWebsocket.tsx'
-import { MainCardHeader } from './MainCardHeader.tsx'
-import { Button } from './ui/button.tsx'
-import { PresetCard } from './PresetCard.tsx'
-import { SystemPresetsCard } from './SystemPresetsCard.tsx'
+import { useWebSocket } from '@/hooks/useWebsocket'
+import { MainCardHeader } from './MainCardHeader'
+import { Button } from './ui/button'
+import { PresetCard } from './PresetCard'
+import { SystemPresetsCard } from './SystemPresetsCard'
 import { SharedCardProps, USER_LEVELS, UserLevel } from '@/types/lumifera.ts'
-import { BlendProgress } from './BlendProgress.tsx'
+import { BlendProgress } from './BlendProgress'
 import { SliderControl } from './SliderControl'
 import { DirectionControl } from './DirectionControl'
 import { FixModeControl } from './FixModeControl'
 import { CrossfadeTimeControl } from './CrossfadeTimeControl'
+import DebugConsole from './DebugConsole/DebugConsole'
 
-const WS_URL = 'ws://lumifera.local/ws'
+const CONTOLLER_HOSTNAME = 'lumifera.local'
+const WS_URL = `ws://${CONTOLLER_HOSTNAME}/ws`
+export const WS_DEBUG_URL = `ws://${CONTOLLER_HOSTNAME}/debug`
 
 export function LumiferaController() {
-    const { wsStatus, connect, params, updateParam, isLoading, progress, updateParams } = useWebSocket(WS_URL)
+    const { wsStatus, connectionState, manualReconnect, params, updateParam, isLoading, progress, updateParams } = useWebSocket(WS_URL)
     const [userLevel, setUserLevel] = useState<UserLevel>(USER_LEVELS.BASIC);
     const isEnabled = wsStatus === 'connected' && params.powerState !== 0;
 
@@ -36,13 +39,17 @@ export function LumiferaController() {
             {/* Main Card */}
             <Card>
                 <MainCardHeader
-                    connect={connect}
+                    manualReconnect={manualReconnect}
+                    connectionState={connectionState}
                     setUserLevel={setUserLevel}
                     {...sharedProps}
                 />
                 <CardContent className="space-y-4">
 
-                    {wsStatus === 'disconnected' && <Button onClick={connect}>Reconnect</Button>}
+                    {/* Only show reconnect button after all automatic retries have failed */}
+                    {!connectionState.isConnected && !connectionState.isConnecting &&
+                        connectionState.reconnectAttempts >= 3 &&
+                        <Button onClick={manualReconnect}>Reconnect</Button>}
 
                     {/* BPM  */}
                     <SliderControl
@@ -71,6 +78,13 @@ export function LumiferaController() {
                         onValueChange={(value) => updateParam('brightness', value)}
                         helpText="Brightness controls the overall brightness of the LEDs. At lower levels the difference is more visible."
                     />
+
+                    {params.brightness + params.bpm < 30 && (
+                        <p className="text-xs text-amber-400 mt-2">
+                            Warning: when BPM + Brightness &lt; 30 (i.e. when both are very low), rendering artifacts are
+                            unfortunately going to show up. Steppy or quantized movements and transitions.
+                            This is a limitation of the LED strips which cannot be fixed in software.
+                        </p>)}
 
                     {/* Direction */}
                     {userLevel === USER_LEVELS.ADVANCED && (
@@ -115,6 +129,9 @@ export function LumiferaController() {
                 <PresetCard {...sharedProps} />
 
             </div>
+            {userLevel === USER_LEVELS.ADVANCED && (
+                <DebugConsole />
+            )}
         </div>
     );
 }
