@@ -79,6 +79,13 @@ export function LumiferaController() {
                         helpText="Brightness controls the overall brightness of the LEDs. At lower levels the difference is more visible."
                     />
 
+                    {params.brightness + params.bpm < 30 && (
+                        <p className="text-xs text-amber-400 mt-2">
+                            Warning: when BPM + Brightness &lt; 30 (i.e. when both are very low), rendering artifacts are
+                            unfortunately going to show up. Steppy or quantized movements and transitions.
+                            This is a limitation of the LED strips which cannot be fixed in software.
+                        </p>)}
+
                     {/* Direction */}
                     {userLevel === USER_LEVELS.ADVANCED && (
                         <DirectionControl
