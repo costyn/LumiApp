@@ -76,6 +76,8 @@ export function useWebSocket(url: string) {
 
     const transitionTimerRef = useRef<NodeJS.Timeout | null>(null)
     const progressIntervalRef = useRef<number | null>(null)
+    const throttleTimerRef = useRef<NodeJS.Timeout | null>(null)
+    const pendingUpdateRef = useRef<{ name: ParamKey; value: number | string } | null>(null)
 
     const clearTimers = () => {
         if (progressIntervalRef.current !== null) {
@@ -85,6 +87,10 @@ export function useWebSocket(url: string) {
         if (transitionTimerRef.current) {
             clearTimeout(transitionTimerRef.current)
             transitionTimerRef.current = null
+        }
+        if (throttleTimerRef.current) {
+            clearTimeout(throttleTimerRef.current)
+            throttleTimerRef.current = null
         }
     }
 
@@ -230,11 +236,51 @@ export function useWebSocket(url: string) {
         };
     }, [connectionState.isConnected, connectionState.isConnecting, manualReconnect]);
 
-    // Update a single param
+    // Throttle delay in milliseconds (adjust this value to control rate limiting)
+    const THROTTLE_DELAY = 50; // 50ms = max 20 updates per second
+
+    // Send pending update to websocket
+    const sendUpdate = useCallback((name: ParamKey, value: number | string) => {
+        if (ws?.readyState === WebSocket.OPEN) {
+            const payload = { [name]: value };
+            console.log('Sending WebSocket message:', payload);
+            ws.send(JSON.stringify(payload));
+        }
+    }, [ws]);
+
+    // Update a single param with throttling
     const updateParam = (name: ParamKey, value: (number | string)) => {
+        // Update local state immediately for responsive UI
         setParams(prev => ({ ...prev, [name]: value }));
+
+        // Store the pending update
+        pendingUpdateRef.current = { name, value };
+
+        // Clear existing throttle timer
+        if (throttleTimerRef.current) {
+            clearTimeout(throttleTimerRef.current);
+        }
+
+        // Set new throttle timer to send update after delay
+        throttleTimerRef.current = setTimeout(() => {
+            if (pendingUpdateRef.current) {
+                sendUpdate(pendingUpdateRef.current.name, pendingUpdateRef.current.value);
+                pendingUpdateRef.current = null;
+            }
+            throttleTimerRef.current = null;
+        }, THROTTLE_DELAY);
+
         setLastChanged(name);
-        clearTimers() // Clear existing timers
+
+        // Clear progress timers but keep throttle timer
+        if (progressIntervalRef.current !== null) {
+            clearInterval(progressIntervalRef.current);
+            progressIntervalRef.current = null;
+        }
+        if (transitionTimerRef.current) {
+            clearTimeout(transitionTimerRef.current);
+            transitionTimerRef.current = null;
+        }
 
         setIsLoading(true);
         setProgress(0);
@@ -248,14 +294,24 @@ export function useWebSocket(url: string) {
             setProgress(newProgress)
 
             if (elapsed >= blendDuration) {
-                clearTimers()
+                if (progressIntervalRef.current !== null) {
+                    clearInterval(progressIntervalRef.current);
+                    progressIntervalRef.current = null;
+                }
                 setIsLoading(false)
                 setProgress(0)
             }
         }, 16)
 
         transitionTimerRef.current = setTimeout(() => {
-            clearTimers()
+            if (progressIntervalRef.current !== null) {
+                clearInterval(progressIntervalRef.current);
+                progressIntervalRef.current = null;
+            }
+            if (transitionTimerRef.current) {
+                clearTimeout(transitionTimerRef.current);
+                transitionTimerRef.current = null;
+            }
             setIsLoading(false)
             setProgress(0)
         }, blendDuration)
@@ -264,23 +320,6 @@ export function useWebSocket(url: string) {
     useEffect(() => {
         return () => clearTimers() // Cleanup on unmount
     }, [])
-
-    useEffect(() => {
-        // console.log('WebSocket send effect triggered:', {
-        //     wsReadyState: ws?.readyState,
-        //     wsOpen: ws?.readyState === WebSocket.OPEN,
-        //     lastChanged,
-        //     paramValue: lastChanged ? params[lastChanged] : null,
-        //     isLoading
-        // });
-
-        if (ws?.readyState === WebSocket.OPEN && lastChanged) {
-            const payload = { [lastChanged]: params[lastChanged] };
-            console.log('Sending WebSocket message:', payload);
-            ws.send(JSON.stringify(payload));
-            setLastChanged(null);
-        }
-    }, [params, ws, lastChanged]);
 
     // Update multiple params at once
     const updateParams = (newParams: Partial<LumiferaParams>) => {
