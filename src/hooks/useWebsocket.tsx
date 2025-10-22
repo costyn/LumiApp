@@ -25,6 +25,14 @@ export interface LumiferaParams {
 }
 
 export type ParamKey = keyof LumiferaParams;
+
+export interface ConnectionState {
+    isConnected: boolean;
+    isConnecting: boolean;
+    reconnectAttempts: number;
+    lastError?: string;
+}
+
 const DEFAULT_PARAMS: LumiferaParams = {
     bpm: 26,
     direction: 1, // 1 = forward, -1 = reverse
@@ -49,10 +57,18 @@ const DEFAULT_PARAMS: LumiferaParams = {
 
 
 export function useWebSocket(url: string) {
-    const [wsStatus, setWsStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected')
+    const [connectionState, setConnectionState] = useState<ConnectionState>({
+        isConnected: false,
+        isConnecting: false,
+        reconnectAttempts: 0,
+        lastError: undefined
+    })
     const [ws, setWs] = useState<WebSocket | null>(null)
     const [params, setParams] = useState<LumiferaParams>(DEFAULT_PARAMS)
     const wsRef = useRef<WebSocket | null>(null);
+    const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const maxReconnectAttempts = 3;
+    const reconnectDelay = 2000;
     const [lastChanged, setLastChanged] = useState<ParamKey | null>(null)
 
     const [isLoading, setIsLoading] = useState(false)
@@ -60,6 +76,8 @@ export function useWebSocket(url: string) {
 
     const transitionTimerRef = useRef<NodeJS.Timeout | null>(null)
     const progressIntervalRef = useRef<number | null>(null)
+    const throttleTimerRef = useRef<NodeJS.Timeout | null>(null)
+    const pendingUpdateRef = useRef<{ name: ParamKey; value: number | string } | null>(null)
 
     const clearTimers = () => {
         if (progressIntervalRef.current !== null) {
@@ -70,26 +88,94 @@ export function useWebSocket(url: string) {
             clearTimeout(transitionTimerRef.current)
             transitionTimerRef.current = null
         }
+        if (throttleTimerRef.current) {
+            clearTimeout(throttleTimerRef.current)
+            throttleTimerRef.current = null
+        }
     }
 
-    const connect = useCallback(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) {
-            return;
+    const cleanup = useCallback(() => {
+        console.log('Cleanup called');
+        if (reconnectTimeoutRef.current) {
+            clearTimeout(reconnectTimeoutRef.current)
+            reconnectTimeoutRef.current = null
         }
 
+        if (wsRef.current) {
+            console.log('Closing existing WebSocket');
+            wsRef.current.close()
+            wsRef.current = null
+        }
+    }, [])
+
+    const connect = useCallback(() => {
+        // Guard against duplicate connections (e.g., React StrictMode double-invocation)
+        if (wsRef.current) {
+            const state = wsRef.current.readyState;
+            if (state === WebSocket.OPEN || state === WebSocket.CONNECTING) {
+                console.log('WebSocket already connected or connecting, skipping');
+                return;
+            }
+            // If there's a CLOSING or CLOSED socket, clean it up first
+            if (state === WebSocket.CLOSING || state === WebSocket.CLOSED) {
+                console.log('Cleaning up old WebSocket before creating new one');
+                wsRef.current = null;
+            }
+        }
+
+        console.log('Connecting to WebSocket:', url);
         const websocket = new WebSocket(url);
         wsRef.current = websocket;
-        setWsStatus('connecting');
+
+        setConnectionState(prev => ({
+            ...prev,
+            isConnecting: true,
+            lastError: undefined
+        }));
 
         websocket.onopen = () => {
-            setWsStatus('connected');
+            console.log('WebSocket connected');
+            setConnectionState({
+                isConnected: true,
+                isConnecting: false,
+                reconnectAttempts: 0,
+                lastError: undefined
+            });
             setWs(websocket);
         };
 
-        websocket.onclose = () => {
-            setWsStatus('disconnected');
+        websocket.onclose = (event) => {
+            console.log('WebSocket disconnected:', event.code, event.reason);
+            setConnectionState(prev => {
+                const newState = {
+                    ...prev,
+                    isConnected: false,
+                    isConnecting: false
+                };
+
+                // Attempt reconnection if under max attempts
+                if (prev.reconnectAttempts < maxReconnectAttempts) {
+                    reconnectTimeoutRef.current = setTimeout(() => {
+                        setConnectionState(prevState => ({
+                            ...prevState,
+                            reconnectAttempts: prevState.reconnectAttempts + 1
+                        }));
+                        connect();
+                    }, reconnectDelay);
+                }
+
+                return newState;
+            });
             setWs(null);
             wsRef.current = null;
+        };
+
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            setConnectionState(prev => ({
+                ...prev,
+                lastError: 'Connection failed'
+            }));
         };
 
         websocket.onmessage = (event) => {
@@ -103,34 +189,98 @@ export function useWebSocket(url: string) {
         };
     }, [url]);
 
-    useEffect(() => {
-        const reconnectDelay = 1000; // 1 second delay
+    const manualReconnect = useCallback(() => {
+        cleanup();
+        setConnectionState({
+            isConnected: false,
+            isConnecting: false,
+            reconnectAttempts: 0,
+            lastError: undefined
+        });
+        connect();
+    }, [cleanup, connect]);
 
-        const cleanup = () => {
-            if (wsRef.current) {
-                wsRef.current.close();
-                wsRef.current = null;
+    // Initialize connection
+    useEffect(() => {
+        console.log('useEffect: initializing connection');
+        connect();
+
+        const handleBeforeUnload = () => {
+            cleanup();
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            console.log('useEffect: cleanup on unmount');
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            cleanup();
+        };
+    }, [connect, cleanup]);
+
+    // Page visibility detection - reconnect when page becomes visible
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible' &&
+                !connectionState.isConnected &&
+                !connectionState.isConnecting) {
+                console.log('Page became visible, attempting to reconnect...');
+                manualReconnect();
             }
         };
 
-        // Add unload handler
-        window.addEventListener('beforeunload', cleanup);
-
-        // Delayed connect
-        const timeoutId = setTimeout(connect, reconnectDelay);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
-            window.removeEventListener('beforeunload', cleanup);
-            clearTimeout(timeoutId);
-            cleanup();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [connect]);
+    }, [connectionState.isConnected, connectionState.isConnecting, manualReconnect]);
 
-    // Update a single param
+    // Throttle delay in milliseconds (adjust this value to control rate limiting)
+    const THROTTLE_DELAY = 50; // 50ms = max 20 updates per second
+
+    // Send pending update to websocket
+    const sendUpdate = useCallback((name: ParamKey, value: number | string) => {
+        if (ws?.readyState === WebSocket.OPEN) {
+            const payload = { [name]: value };
+            console.log('Sending WebSocket message:', payload);
+            ws.send(JSON.stringify(payload));
+        }
+    }, [ws]);
+
+    // Update a single param with throttling
     const updateParam = (name: ParamKey, value: (number | string)) => {
+        // Update local state immediately for responsive UI
         setParams(prev => ({ ...prev, [name]: value }));
+
+        // Store the pending update
+        pendingUpdateRef.current = { name, value };
+
+        // Clear existing throttle timer
+        if (throttleTimerRef.current) {
+            clearTimeout(throttleTimerRef.current);
+        }
+
+        // Set new throttle timer to send update after delay
+        throttleTimerRef.current = setTimeout(() => {
+            if (pendingUpdateRef.current) {
+                sendUpdate(pendingUpdateRef.current.name, pendingUpdateRef.current.value);
+                pendingUpdateRef.current = null;
+            }
+            throttleTimerRef.current = null;
+        }, THROTTLE_DELAY);
+
         setLastChanged(name);
-        clearTimers() // Clear existing timers
+
+        // Clear progress timers but keep throttle timer
+        if (progressIntervalRef.current !== null) {
+            clearInterval(progressIntervalRef.current);
+            progressIntervalRef.current = null;
+        }
+        if (transitionTimerRef.current) {
+            clearTimeout(transitionTimerRef.current);
+            transitionTimerRef.current = null;
+        }
 
         setIsLoading(true);
         setProgress(0);
@@ -144,14 +294,24 @@ export function useWebSocket(url: string) {
             setProgress(newProgress)
 
             if (elapsed >= blendDuration) {
-                clearTimers()
+                if (progressIntervalRef.current !== null) {
+                    clearInterval(progressIntervalRef.current);
+                    progressIntervalRef.current = null;
+                }
                 setIsLoading(false)
                 setProgress(0)
             }
         }, 16)
 
         transitionTimerRef.current = setTimeout(() => {
-            clearTimers()
+            if (progressIntervalRef.current !== null) {
+                clearInterval(progressIntervalRef.current);
+                progressIntervalRef.current = null;
+            }
+            if (transitionTimerRef.current) {
+                clearTimeout(transitionTimerRef.current);
+                transitionTimerRef.current = null;
+            }
             setIsLoading(false)
             setProgress(0)
         }, blendDuration)
@@ -160,23 +320,6 @@ export function useWebSocket(url: string) {
     useEffect(() => {
         return () => clearTimers() // Cleanup on unmount
     }, [])
-
-    useEffect(() => {
-        // console.log('WebSocket send effect triggered:', {
-        //     wsReadyState: ws?.readyState,
-        //     wsOpen: ws?.readyState === WebSocket.OPEN,
-        //     lastChanged,
-        //     paramValue: lastChanged ? params[lastChanged] : null,
-        //     isLoading
-        // });
-
-        if (ws?.readyState === WebSocket.OPEN && lastChanged) {
-            const payload = { [lastChanged]: params[lastChanged] };
-            console.log('Sending WebSocket message:', payload);
-            ws.send(JSON.stringify(payload));
-            setLastChanged(null);
-        }
-    }, [params, ws, lastChanged]);
 
     // Update multiple params at once
     const updateParams = (newParams: Partial<LumiferaParams>) => {
@@ -192,5 +335,23 @@ export function useWebSocket(url: string) {
         }
     };
 
-    return { ws, wsStatus, connect, params, updateParam, lastChanged, setLastChanged, isLoading, progress, updateParams }
+    // Computed wsStatus for backward compatibility
+    const wsStatus: 'connecting' | 'connected' | 'disconnected' =
+        connectionState.isConnecting ? 'connecting' :
+            connectionState.isConnected ? 'connected' : 'disconnected';
+
+    return {
+        ws,
+        wsStatus,
+        connectionState,
+        connect,
+        manualReconnect,
+        params,
+        updateParam,
+        lastChanged,
+        setLastChanged,
+        isLoading,
+        progress,
+        updateParams
+    }
 }

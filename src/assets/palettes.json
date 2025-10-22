@@ -1,671 +1,932 @@
 {
-	"palettes":[
-		{
-            "index" : 0,
-	   		"label": "Rainbow",
-			"gpName" : "RainbowColors_p",
-            "enabled" : "yes",
-            "tags" : [
+    "palettes": [
+        {
+            "index": 0,
+            "label": "Rainbow",
+            "gpName": "RainbowColors_p",
+            "enabled": "yes",
+            "tags": [
                 "rainbow",
                 "bright",
                 "fastled"
-            ]
-		},
-		{
-            "index" : 1,
-	   		"label": "Ocean",
-			"gpName" : "OceanColors_p",
-            "enabled" : "yes",
-            "tags" : [
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 1,
+            "label": "Ocean",
+            "gpName": "OceanColors_p",
+            "enabled": "yes",
+            "tags": [
                 "cool",
                 "fastled"
-            ]
-		},
-		{
-            "index" : 2,
-	   		"label": "Heat",
-			"gpName" : "HeatColors_p",
-            "enabled" : "yes",
-            "tags" : [
-                "warm",
-                "fastled"
-            ]
-		},
-		{
-            "index" : 3,
-	   		"label": "Lava",
-			"gpName" : "LavaColors_p",
-            "enabled" : "yes",
-            "tags" : [
-                "warm",
-                "fastled"
-            ]
-		},
+            ],
+            "type": "progmem"
+        },
         {
-            "index" : 4,
-	   		"label": "Heat",
-			"gpName" : "PartyColors_p",
-            "enabled" : "yes",
-            "tags" : [
+            "index": 2,
+            "label": "Heat",
+            "gpName": "HeatColors_p",
+            "enabled": "yes",
+            "tags": [
+                "warm",
+                "fastled"
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 3,
+            "label": "Lava",
+            "gpName": "LavaColors_p",
+            "enabled": "yes",
+            "tags": [
+                "warm",
+                "fastled"
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 4,
+            "label": "Heat",
+            "gpName": "PartyColors_p",
+            "enabled": "yes",
+            "tags": [
                 "bright",
                 "red",
                 "fastled"
-            ]
-		},
-		{
-            "index" : 5,
-	   		"label": "Clouds",
-			"gpName" : "CloudColors_p",
-            "enabled" : "yes",
-            "tags" : [
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 5,
+            "label": "Clouds",
+            "gpName": "CloudColors_p",
+            "enabled": "yes",
+            "tags": [
                 "cool",
                 "bright",
                 "blue",
                 "fastled"
-            ]
-		},
-		{
-            "index" : 6,
-	   		"label": "Forest",
-			"gpName" : "ForestColors_p",
-            "enabled" : "yes",
-            "tags" : [
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 6,
+            "label": "Forest",
+            "gpName": "ForestColors_p",
+            "enabled": "yes",
+            "tags": [
                 "cool",
                 "fastled"
-            ]
-		},
-		{
-            "index" : 7,
-	   		"label": "Rainbow Bands",
-			"gpName" : "sutaburosuRainbowPalette",
-            "enabled" : "yes",
-            "tags" : [
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 7,
+            "label": "Rainbow Bands",
+            "gpName": "sutaburosuRainbowPalette",
+            "enabled": "yes",
+            "tags": [
                 "happy",
                 "custom"
-            ]
-		},
-		{
-            "index" : 8,
-	   		"label": "Red Stripe",
-			"gpName" : "aspect_gp",
-            "enabled" : "yes",
-            "tags" : [
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 8,
+            "label": "Red Stripe",
+            "gpName": "aspect_gp",
+            "enabled": "yes",
+            "tags": [
                 "red",
                 "dark",
                 "custom"
-            ]
-		},
-		{
-            "index" : 9,
-	   		"label": "Yellow Purp Red",
-			"gpName" : "yellowPurpRed_p",
-            "enabled" : "yes",
-            "tags" : [
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 9,
+            "label": "Yellow Purp Red",
+            "gpName": "yellowPurpRed_p",
+            "enabled": "yes",
+            "tags": [
                 "happy",
                 "custom"
-            ]
-		},
-		{
-            "index" : 10,
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 10,
             "label": "WubSunSet",
-            "gpName" : "WubGradSunSet",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "WubGradSunSet",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "custom"
-            ]
+            ],
+            "type": "progmem"
         },
-		{
-            "index" : 11,
+        {
+            "index": 11,
             "label": "Andy Gilmore 2",
-            "gpName" : "AndyGIlmore2",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "AndyGIlmore2",
+            "enabled": "yes",
+            "tags": [
                 "funky",
                 "custom"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 12,
+            "index": 12,
             "label": "CSS Gradient Test",
-            "gpName" : "cssgradient1",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "cssgradient1",
+            "enabled": "yes",
+            "tags": [
                 "custom"
-            ]
+            ],
+            "type": "progmem"
         },
-		{
-            "index" : 13,
+        {
+            "index": 13,
             "label": "Sunset",
-            "gpName" : "Sunset_Real_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Sunset_Real_gp",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
-		{
-            "index" : 14,
+        {
+            "index": 14,
             "label": "Rivendell",
-            "gpName" : "es_rivendell_15_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_rivendell_15_gp",
+            "enabled": "yes",
+            "tags": [
                 "green",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
-		{
-            "index" : 15,
+        {
+            "index": 15,
             "label": "Breeze",
-            "gpName" : "es_ocean_breeze_036_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_ocean_breeze_036_gp",
+            "enabled": "yes",
+            "tags": [
                 "cool",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 16,
+            "index": 16,
             "label": "Red & Blue",
-            "gpName" : "rgi_15_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "rgi_15_gp",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 17,
+            "index": 17,
             "label": "Yellowout",
-            "gpName" : "retro2_16_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "retro2_16_gp",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 18,
+            "index": 18,
             "label": "Analogous",
-            "gpName" : "Analogous_1_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Analogous_1_gp",
+            "enabled": "yes",
+            "tags": [
                 "yellow",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 19,
+            "index": 19,
             "label": "Splash",
-            "gpName" : "es_pinksplash_08_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_pinksplash_08_gp",
+            "enabled": "yes",
+            "tags": [
                 "pink",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 20,
+            "index": 20,
             "label": "Pastel",
-            "gpName" : "Sunset_Yellow_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Sunset_Yellow_gp",
+            "enabled": "yes",
+            "tags": [
                 "sunset",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 21,
+            "index": 21,
             "label": "Sunset2",
-            "gpName" : "Another_Sunset_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Another_Sunset_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 22,
+            "index": 22,
             "label": "Beech",
-            "gpName" : "Beech_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Beech_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 23,
+            "index": 23,
             "label": "Vintage",
-            "gpName" : "es_vintage_01_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_vintage_01_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 24,
+            "index": 24,
             "label": "Departure",
-            "gpName" : "departure_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "departure_gp",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 25,
+            "index": 25,
             "label": "Landscape",
-            "gpName" : "es_landscape_64_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_landscape_64_gp",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" :26,
+            "index": 26,
             "label": "Beach",
-            "gpName" : "es_landscape_33_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_landscape_33_gp",
+            "enabled": "yes",
+            "tags": [
                 "warm",
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 27,
+            "index": 27,
             "label": "Sherbet",
-            "gpName" : "rainbowsherbet_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "rainbowsherbet_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 28,
+            "index": 28,
             "label": "Hult",
-            "gpName" : "gr65_hult_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "gr65_hult_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 29,
+            "index": 29,
             "label": "Hult64",
-            "gpName" : "gr64_hult_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "gr64_hult_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 30,
+            "index": 30,
             "label": "Drywet",
-            "gpName" : "GMT_drywet_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "GMT_drywet_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 31,
+            "index": 31,
             "label": "Jul",
-            "gpName" : "ib_jul01_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "ib_jul01_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 32,
+            "index": 32,
             "label": "Grintage",
-            "gpName" : "es_vintage_57_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_vintage_57_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 33,
+            "index": 33,
             "label": "Rewhi",
-            "gpName" : "ib15_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "ib15_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 34,
+            "index": 34,
             "label": "Tertiary",
-            "gpName" : "Tertiary_01_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Tertiary_01_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 35,
+            "index": 35,
             "label": "Fire",
-            "gpName" : "lava_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "lava_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 36,
+            "index": 36,
             "label": "Icefire",
-            "gpName" : "fierce_ice_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "fierce_ice_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 37,
+            "index": 37,
             "label": "Cyane",
-            "gpName" : "Colorfull_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Colorfull_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 38,
+            "index": 38,
             "label": "Light Pink",
-            "gpName" : "Pink_Purple_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Pink_Purple_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 39,
+            "index": 39,
             "label": "Autumn",
-            "gpName" : "es_autumn_19_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "es_autumn_19_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 40,
+            "index": 40,
             "label": "Magenta",
-            "gpName" : "BlacK_Blue_Magenta_White_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "BlacK_Blue_Magenta_White_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 41,
+            "index": 41,
             "label": "Magred",
-            "gpName" : "BlacK_Magenta_Red_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "BlacK_Magenta_Red_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 42,
+            "index": 42,
             "label": "Yelmag",
-            "gpName" : "BlacK_Red_Magenta_Yellow_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "BlacK_Red_Magenta_Yellow_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 43,
+            "index": 43,
             "label": "Yelblu",
-            "gpName" : "Blue_Cyan_Yellow_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Blue_Cyan_Yellow_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 44,
+            "index": 44,
             "label": "Orange & Teal",
-            "gpName" : "Orange_Teal_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Orange_Teal_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 45,
+            "index": 45,
             "label": "Tiamat",
-            "gpName" : "Tiamat_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Tiamat_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 46,
+            "index": 46,
             "label": "April Night",
-            "gpName" : "April_Night_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "April_Night_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 47,
+            "index": 47,
             "label": "Orangery",
-            "gpName" : "Orangery_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Orangery_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 48,
+            "index": 48,
             "label": "C9",
-            "gpName" : "C9_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "C9_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 49,
+            "index": 49,
             "label": "Sakura",
-            "gpName" : "Sakura_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Sakura_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 50,
+            "index": 50,
             "label": "Aurora",
-            "gpName" : "Aurora_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Aurora_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 51,
+            "index": 51,
             "label": "Atlantica",
-            "gpName" : "Atlantica_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Atlantica_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 52,
+            "index": 52,
             "label": "C9 2",
-            "gpName" : "C9_2_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "C9_2_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 53,
+            "index": 53,
             "label": "C9 New",
-            "gpName" : "C9_new_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "C9_new_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 54,
+            "index": 54,
             "label": "Temperature",
-            "gpName" : "temperature_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "temperature_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 55,
+            "index": 55,
             "label": "Aurora 2",
-            "gpName" : "Aurora2_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "Aurora2_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 56,
+            "index": 56,
             "label": "Retro Clown",
-            "gpName" : "retro_clown_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "retro_clown_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 57,
+            "index": 57,
             "label": "Candy",
-            "gpName" : "candy_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "candy_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 58,
+            "index": 58,
             "label": "Toxy Reaf",
-            "gpName" : "toxy_reaf_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "toxy_reaf_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 59,
+            "index": 59,
             "label": "Fairy Reaf",
-            "gpName" : "fairy_reaf_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "fairy_reaf_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 60,
+            "index": 60,
             "label": "Semi Blue",
-            "gpName" : "semi_blue_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "semi_blue_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 61,
+            "index": 61,
             "label": "Pink Candy",
-            "gpName" : "pink_candy_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "pink_candy_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 62,
+            "index": 62,
             "label": "Red Reaf",
-            "gpName" : "red_reaf_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "red_reaf_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 63,
+            "index": 63,
             "label": "Aqua Flash",
-            "gpName" : "aqua_flash_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "aqua_flash_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 64,
+            "index": 64,
             "label": "Yelblu Hot",
-            "gpName" : "yelblu_hot_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "yelblu_hot_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 65,
+            "index": 65,
             "label": "Lite Light",
-            "gpName" : "lite_light_gp",
-            "enabled" : "no",
-            "tags" : [
+            "gpName": "lite_light_gp",
+            "enabled": "no",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 66,
+            "index": 66,
             "label": "Red Flash",
-            "gpName" : "red_flash_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "red_flash_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 67,
+            "index": 67,
             "label": "Blink Red",
-            "gpName" : "blink_red_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "blink_red_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 68,
+            "index": 68,
             "label": "Red Shift",
-            "gpName" : "red_shift_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "red_shift_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
-            ]
+            ],
+            "type": "progmem"
         },
         {
-            "index" : 69,
+            "index": 69,
             "label": "Red Tide",
-            "gpName" : "red_tide_gp",
-            "enabled" : "yes",
-            "tags" : [
+            "gpName": "red_tide_gp",
+            "enabled": "yes",
+            "tags": [
                 "wled"
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 70,
+            "label": "Candy2",
+            "gpName": "candy2_gp",
+            "enabled": "yes",
+            "tags": [
+                "wled"
+            ],
+            "type": "progmem"
+        },
+        {
+            "index": 71,
+            "label": "Ocean Sunset",
+            "type": "hex",
+            "colors": [
+                "#FF6B35",
+                "#F7931E",
+                "#FDC830",
+                "#F37335",
+                "#C02942"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "warm",
+                "user"
             ]
         },
         {
-            "index" : 70,
-            "label": "Candy2",
-            "gpName" : "candy2_gp",
-            "enabled" : "yes",
-            "tags" : [
-                "wled"
+            "index": 72,
+            "label": "Cool Breeze",
+            "type": "hex",
+            "colors": [
+                "#0B3954",
+                "#087E8B",
+                "#BFD7EA",
+                "#5E92C0",
+                "#1F5673"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "cool",
+                "user"
+            ]
+        },
+        {
+            "index": 73,
+            "label": "Forest Dream",
+            "type": "hex",
+            "colors": [
+                "#2D5016",
+                "#4A7C1B",
+                "#8BC34A",
+                "#C5E1A5",
+                "#2D5016"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "green",
+                "user"
+            ]
+        },
+        {
+            "index": 74,
+            "label": "Ultra Violent Pear",
+            "type": "hex",
+            "colors": [
+                "#5B507A",
+                "#5B618A",
+                "#9EADC8",
+                "#B9E28C",
+                "#D6D84F"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "green",
+                "purple",
+                "user"
+            ]
+        },
+        {
+            "index": 75,
+            "label": "Persian Eggplant",
+            "type": "hex",
+            "colors": [
+                "#340068",
+                "#FF6978",
+                "#FFFCF9",
+                "#B1EDE8",
+                "#6D435A"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "green",
+                "red",
+                "user"
+            ]
+        },
+        {
+            "index": 76,
+            "label": "Dark Tiffany",
+            "type": "hex",
+            "colors": [
+                "#090909",
+                "#4B5043",
+                "#9BC4BC",
+                "#D3FFE9",
+                "#8DDBE0"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "green",
+                "purple",
+                "user"
+            ]
+        },
+        {
+            "index": 100,
+            "label": "Solid Black",
+            "type": "hex",
+            "colors": [
+                "#000000",
+                "#000000",
+                "#000000",
+                "#000000",
+                "#000000"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "solid",
+                "utility"
+            ]
+        },
+        {
+            "index": 101,
+            "label": "Solid Red",
+            "type": "hex",
+            "colors": [
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "solid",
+                "utility"
+            ]
+        },
+        {
+            "index": 102,
+            "label": "Solid Green",
+            "type": "hex",
+            "colors": [
+                "#00FF00",
+                "#00FF00",
+                "#00FF00",
+                "#00FF00",
+                "#00FF00"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "solid",
+                "utility"
+            ]
+        },
+        {
+            "index": 103,
+            "label": "Solid Blue",
+            "type": "hex",
+            "colors": [
+                "#0000FF",
+                "#0000FF",
+                "#0000FF",
+                "#0000FF",
+                "#0000FF"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "solid",
+                "utility"
+            ]
+        },
+        {
+            "index": 104,
+            "label": "Solid White",
+            "type": "hex",
+            "colors": [
+                "#FFFFFF",
+                "#FFFFFF",
+                "#FFFFFF",
+                "#FFFFFF",
+                "#FFFFFF"
+            ],
+            "enabled": "yes",
+            "tags": [
+                "solid",
+                "utility"
             ]
         }
-	]
- }
+    ]
+}

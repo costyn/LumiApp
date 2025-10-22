@@ -1,0 +1,30 @@
+/* Debug Console - Always dark background for readability */
+.debug-console-output {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  height: 300px;
+  overflow-y: auto;
+  background: #0a0a0a;
+  color: hsl(142 70% 55%);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+  padding: 0.75rem;
+}
+
+.debug-console-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+.debug-console-output::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.debug-console-output::-webkit-scrollbar-thumb {
+  background: hsl(142 70% 45%);
+  border-radius: 4px;
+}
+
+.debug-console-output::-webkit-scrollbar-thumb:hover {
+  background: hsl(142 70% 55%);
+}
