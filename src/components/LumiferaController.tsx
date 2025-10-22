@@ -49,7 +49,7 @@ export function LumiferaController() {
     }
 
     return (
-        <div className="space-y-4 max-w-6xl mx-auto p-4">
+        <div className="space-y-4 max-w-6xl mx-auto p-2 md:p-4">
             {/* Main Card */}
             <Card>
                 <MainCardHeader
